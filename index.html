@@ -4,224 +4,209 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Strategic Alternatives</title>
+
   <style>
-    :root {
+    :root{
       --blue: #2f64f5;
-      --border: 2px solid var(--blue);
-      --gapX: 70px;     /* horizontal spacing between columns */
-      --gapY: 48px;     /* vertical spacing between left boxes */
-      --boxW: 240px;
-      --boxPad: 18px;
       --line: var(--blue);
+      --border: 2px solid var(--blue);
+
+      /* ===== Fixed viewport ===== */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* ===== Smaller boxes ===== */
+      --boxW: 105px;
+      --boxH: 115px;
+      --boxPad: 8px;
+
+      /* ===== Tighter spacing ===== */
+      --gapX: 12px;
+      --gapY: 18px;
+      --leftTop: 6px;
+      --stub: 10px;
+
+      /* ===== Typography ===== */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+
+      /* ===== Derived positions ===== */
+      --mid1: calc(var(--leftTop) + (var(--boxH) / 2));
+      --mid2: calc(var(--mid1) + var(--boxH) + var(--gapY));
+      --midBetween: calc((var(--mid1) + var(--mid2)) / 2);
+
+      --vX: calc(var(--boxW) + var(--stub));
+      --rightOffset: calc(var(--midBetween) - (var(--boxH) / 2));
     }
 
-    body {
+    body{
       margin: 0;
-      padding: 24px;
+      padding: 0;
       font-family: Arial, sans-serif;
       background: #fff;
-      color: #000;
     }
 
-    .container {
-      width: min(1100px, 100%);
-      margin: 0 auto;
-      position: relative;
+    /* 500x500 frame */
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
     }
 
-    .header {
+    .header{
       background: var(--blue);
       color: #fff;
-      padding: 16px 22px;
-      font-size: 15px;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
       font-weight: 700;
-      margin-bottom: 44px;
+      margin-bottom: 12px;
     }
 
-    /* Grid layout: left column + three right columns */
-    .flow {
-      display: grid;
-      grid-template-columns: var(--boxW) var(--boxW) var(--boxW) var(--boxW);
-      column-gap: var(--gapX);
-      align-items: start;
+    .flow{
       position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, var(--boxW));
+      column-gap: var(--gapX);
     }
 
-    /* Left stack (1010 / 1020) */
-    .left {
+    .left{
       grid-column: 1;
       position: relative;
       display: grid;
       row-gap: var(--gapY);
-      padding-top: 6px;
+      padding-top: var(--leftTop);
     }
 
-    /* Steps 1030/1040/1050 aligned with the top left box */
-    .step1030 { grid-column: 2; padding-top: 86px; }
-    .step1040 { grid-column: 3; padding-top: 86px; }
-    .step1050 { grid-column: 4; padding-top: 86px; }
+    .step1030{ grid-column: 2; padding-top: var(--rightOffset); }
+    .step1040{ grid-column: 3; padding-top: var(--rightOffset); }
+    .step1050{ grid-column: 4; padding-top: var(--rightOffset); }
 
-    /* Clickable box as a link */
-    .box-link {
+    .box-link{
       display: block;
-      height: 220px;
       width: var(--boxW);
+      height: var(--boxH);
       border: var(--border);
       padding: var(--boxPad);
-      background: #fff;
-      text-decoration: none;
-      color: inherit;
-      line-height: 1.25;
       box-sizing: border-box;
-      position: relative;
-      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+      text-decoration: none;
+      color: #000;
+      line-height: 1.15;
+      background: #fff;
     }
 
-    .box-link:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-      background: #f9fbff;
-    }
-
-    .box-link:focus {
-      outline: 3px solid rgba(47,100,245,0.35);
-      outline-offset: 2px;
-    }
-
-    .step {
-      font-size: 22px;
+    .step{
+      font-size: var(--stepFont);
       font-weight: 700;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
 
-    .text {
-      font-size: 10px;
-      font-weight: 500;
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
     }
 
-    /* Connector lines */
-    .v-line {
+    /* ===== CONNECTORS ===== */
+
+    /* vertical spine */
+    .v-line{
       position: absolute;
-      left: calc(var(--boxW) + 12px); /* just to the right of left boxes */
-      top: 74px;                      /* aligns near middle of 1010 box */
-      height: 240px;                  /* spans down toward 1020 */
+      left: calc(var(--vX) - 1px);
+      top: var(--mid1);
+      height: calc(var(--mid2) - var(--mid1));
       width: 2px;
       background: var(--line);
     }
 
-    /* horizontal connectors from left column to 1030, and between right boxes */
-    .h-line {
+    /* stubs from 1010 / 1020 */
+    .left-h{
       position: absolute;
+      left: var(--boxW);
+      width: calc(var(--stub) + 1px);
+      height: 2px;
+      background: var(--line);
+    }
+    .left-h.top{ top: var(--mid1); }
+    .left-h.bottom{ top: var(--mid2); }
+
+    /* horizontal connectors */
+    .h-line{
+      position: absolute;
+      top: var(--midBetween);
       height: 2px;
       background: var(--line);
     }
 
-    /* Left -> 1030 */
-    .h1 {
-      left: calc(var(--boxW) + 12px);
-      top: 206px; /* aligns with the 1030 box midline given padding-top */
-      width: calc(var(--gapX) - 12px);
+    .h1{
+      left: calc(var(--vX) - 1px);
+      width: calc(var(--gapX) - var(--stub) + 1px);
     }
 
-    /* 1030 -> 1040 */
-    .h2 {
-      left: calc(var(--boxW) + var(--gapX) + var(--boxW));
-      top: 206px;
-      width: var(--gapX);
-      transform: translateX(0);
+    .h2{
+      left: calc((var(--boxW) * 2 + var(--gapX)) - 1px);
+      width: calc(var(--gapX) + 1px);
     }
 
-    /* 1040 -> 1050 */
-    .h3 {
-      left: calc(var(--boxW) + (var(--gapX) * 2) + (var(--boxW) * 2));
-      top: 206px;
-      width: var(--gapX);
+    .h3{
+      left: calc((var(--boxW) * 3 + var(--gapX) * 2) - 1px);
+      width: calc(var(--gapX) + 1px);
     }
-
-    /* Small responsive tweak so it doesn't explode in small iframes */
-    @media (max-width: 1050px) {
-      :root {
-        --gapX: 40px;
-        --boxW: 220px;
-      }
-      .text { font-size: 22px; }
-    }
-
-    /* small horizontal connectors from boxes to vertical line */
-    .left-h {
-    position: absolute;
-    height: 2px;
-    width: 14px;
-    background: var(--line);
-    left: calc(var(--boxW));
-    }
-
-    /* 1010 connector */
-    .left-h.top {
-    top: 74px; /* midline of 1010 */
-    }
-
-    /* 1020 connector */
-    .left-h.bottom {
-    top: calc(74px + var(--gapY) + 190px);
-    }
-
   </style>
 </head>
+
 <body>
-  <div class="container">
+  <div class="frame">
     <div class="header">Strategic Alternatives</div>
 
     <div class="flow">
-      <!-- Left stack -->
       <div class="left">
-        <a class="box-link" href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/1010-Develop.aspx?web=1" target="_blank" rel="noopener noreferrer">
+        <a class="box-link" href="#">
           <div class="step">1010</div>
           <div class="text">Develop<br/>Acquisition<br/>Objectives &amp;<br/>Rationale</div>
         </a>
 
-        <a class="box-link" href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1020.aspx?web=1" target="_blank" rel="noopener noreferrer">
+        <a class="box-link" href="#">
           <div class="step">1020</div>
           <div class="text">Assess<br/>Current<br/>Position &amp;<br/>Gaps</div>
         </a>
 
-        <!-- vertical connector between 1010 and 1020 -->
-        <div class="v-line" aria-hidden="true"></div>
+        <div class="v-line"></div>
+        <div class="left-h top"></div>
+        <div class="left-h bottom"></div>
       </div>
 
-      <!-- 1030 -->
       <div class="step1030">
-        <a class="box-link" href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1030-.aspx?web=1" target="_blank" rel="noopener noreferrer">
+        <a class="box-link" href="#">
           <div class="step">1030</div>
           <div class="text">Develop &amp;<br/>Consider<br/>Alternative<br/>Scenarios</div>
         </a>
       </div>
 
-      <!-- 1040 -->
       <div class="step1040">
-        <a class="box-link" href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1040-.aspx?web=1" target="_blank" rel="noopener noreferrer">
+        <a class="box-link" href="#">
           <div class="step">1040</div>
           <div class="text">Draft the<br/>Acquisition<br/>Plan</div>
         </a>
       </div>
 
-      <!-- 1050 -->
       <div class="step1050">
-        <a class="box-link" href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1050--Assemble-the-Team.aspx?web=1" target="_blank" rel="noopener noreferrer">
+        <a class="box-link" href="#">
           <div class="step">1050</div>
           <div class="text">Assemble<br/>the Team</div>
         </a>
       </div>
 
-      <!-- horizontal connectors -->
-      <div class="h-line h1" aria-hidden="true"></div>
-      <div class="h-line h2" aria-hidden="true"></div>
-      <div class="h-line h3" aria-hidden="true"></div>
-
-      <div class="h-line left-h top" aria-hidden="true"></div>
-      <div class="h-line left-h bottom" aria-hidden="true"></div>
+      <div class="h-line h1"></div>
+      <div class="h-line h2"></div>
+      <div class="h-line h3"></div>
     </div>
   </div>
 </body>
 </html>
+
 
