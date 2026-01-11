@@ -11,27 +11,22 @@
       --line: var(--blue);
       --border: 2px solid var(--blue);
 
-      /* ===== Fixed viewport ===== */
       --frameW: 500px;
       --frameH: 500px;
 
-      /* ===== Smaller boxes ===== */
       --boxW: 105px;
       --boxH: 115px;
       --boxPad: 8px;
 
-      /* ===== Tighter spacing ===== */
       --gapX: 12px;
       --gapY: 18px;
       --leftTop: 6px;
       --stub: 10px;
 
-      /* ===== Typography ===== */
       --headerFont: 17px;
       --stepFont: 11px;
       --textFont: 9.5px;
 
-      /* ===== Derived positions ===== */
       --mid1: calc(var(--leftTop) + (var(--boxH) / 2));
       --mid2: calc(var(--mid1) + var(--boxH) + var(--gapY));
       --midBetween: calc((var(--mid1) + var(--mid2)) / 2);
@@ -47,7 +42,6 @@
       background: #fff;
     }
 
-    /* 500x500 frame */
     .frame{
       width: var(--frameW);
       height: var(--frameH);
@@ -111,9 +105,6 @@
       font-weight: 400;
     }
 
-    /* ===== CONNECTORS ===== */
-
-    /* vertical spine */
     .v-line{
       position: absolute;
       left: calc(var(--vX) - 1px);
@@ -123,7 +114,6 @@
       background: var(--line);
     }
 
-    /* stubs from 1010 / 1020 */
     .left-h{
       position: absolute;
       left: var(--boxW);
@@ -134,7 +124,6 @@
     .left-h.top{ top: var(--mid1); }
     .left-h.bottom{ top: var(--mid2); }
 
-    /* horizontal connectors */
     .h-line{
       position: absolute;
       top: var(--midBetween);
@@ -165,12 +154,16 @@
 
     <div class="flow">
       <div class="left">
-        <a class="box-link" href="#">
+        <a class="box-link"
+           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/1010-Develop.aspx?web=1"
+           target="_blank" rel="noopener noreferrer">
           <div class="step">1010</div>
           <div class="text">Develop<br/>Acquisition<br/>Objectives &amp;<br/>Rationale</div>
         </a>
 
-        <a class="box-link" href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1020.aspx?web=1">
+        <a class="box-link"
+           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1020.aspx?web=1"
+           target="_blank" rel="noopener noreferrer">
           <div class="step">1020</div>
           <div class="text">Assess<br/>Current<br/>Position &amp;<br/>Gaps</div>
         </a>
@@ -181,21 +174,27 @@
       </div>
 
       <div class="step1030">
-        <a class="box-link" href="#">
+        <a class="box-link"
+           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1030-.aspx?web=1"
+           target="_blank" rel="noopener noreferrer">
           <div class="step">1030</div>
           <div class="text">Develop &amp;<br/>Consider<br/>Alternative<br/>Scenarios</div>
         </a>
       </div>
 
       <div class="step1040">
-        <a class="box-link" href="#">
+        <a class="box-link"
+           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1040-.aspx?web=1"
+           target="_blank" rel="noopener noreferrer">
           <div class="step">1040</div>
           <div class="text">Draft the<br/>Acquisition<br/>Plan</div>
         </a>
       </div>
 
       <div class="step1050">
-        <a class="box-link" href="#">
+        <a class="box-link"
+           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1050--Assemble-the-Team.aspx?web=1"
+           target="_blank" rel="noopener noreferrer">
           <div class="step">1050</div>
           <div class="text">Assemble<br/>the Team</div>
         </a>
@@ -208,6 +207,8 @@
   </div>
 </body>
 </html>
+
+
 
 
 
