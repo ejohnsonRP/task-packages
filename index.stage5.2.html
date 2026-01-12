@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Integration Execution</title>
+
+  <style>
+    :root{
+      /* Red used everywhere */
+      --red: #c00000;
+
+      --border: 3px solid var(--red);
+      --line: var(--red);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing */
+      --boxW: 90px;
+      --boxH: 110px;
+      --boxPad: 10px;
+
+      /* Spacing */
+      --gapX: 12px;
+
+      /* Typography (STANDARD across all pages) */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+
+      /* Layout helpers */
+      --flowTopPad: 10px;
+      --rowCenterY: calc(var(--flowTopPad) + (var(--boxH) / 2));
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+      background: #fff;
+    }
+
+    .header{
+      background: var(--red);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, var(--boxW));
+      column-gap: var(--gapX);
+      align-items: start;
+      padding-top: var(--flowTopPad);
+    }
+
+    .box{
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 400;
+      margin: 0 0 6px 0;
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    /* Straight connector lines */
+    .h-line{
+      position: absolute;
+      height: 2px;
+      background: var(--line);
+      top: var(--rowCenterY);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
+    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
+    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Integration Execution</div>
+
+    <div class="flow">
+      <div class="box">
+        <div class="step">5110</div>
+        <div class="text">
+          Implement<br/>
+          Integration<br/>
+          Plans Across<br/>
+          All Functions
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="step">5120</div>
+        <div class="text">
+          Manage<br/>
+          Organization<br/>
+          and Cultural<br/>
+          Integration
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="step">5130</div>
+        <div class="text">
+          Monitor<br/>
+          Customer-<br/>
+          Facing<br/>
+          Operations
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="step">5140</div>
+        <div class="text">
+          Monitor<br/>
+          Integration<br/>
+          Progress and<br/>
+          Issues
+        </div>
+      </div>
+
+      <!-- connector lines -->
+      <div class="h-line h12"></div>
+      <div class="h-line h23"></div>
+      <div class="h-line h34"></div>
+    </div>
+  </div>
+</body>
+</html>
