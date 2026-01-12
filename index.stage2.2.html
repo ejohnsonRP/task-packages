@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interloper Analysis</title>
+
+  <style>
+    :root{
+      /* Teal theme */
+      --teal: #0a9b8a;
+
+      --line: var(--teal);
+      --border: 2px solid var(--teal);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing */
+      --boxW: 85px;
+      --boxH: 115px;
+      --boxPad: 8px;
+
+      /* Spacing */
+      --gapX: 8px;
+
+      /* Typography (UNCHANGED across all stages) */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    /* 500x500 frame */
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    /* Header bar */
+    .header{
+      background: var(--teal);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    /* Flow layout */
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, var(--boxW));
+      column-gap: var(--gapX);
+      align-items: start;
+      padding-top: 8px;
+    }
+
+    /* Clickable box */
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 700;
+      margin: 0 0 5px 0;
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* Connector lines */
+    .h-line{
+      position: absolute;
+      height: 2px;
+      background: var(--line);
+      top: calc(8px + (var(--boxH) / 2));
+      pointer-events: none; /* do not block clicks */
+      z-index: 1;
+    }
+
+    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
+    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
+    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
+    .h45{ left: calc((var(--boxW) * 4) + (var(--gapX) * 3)); width: var(--gapX); }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Interloper Analysis</div>
+
+    <div class="flow">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2210--Identify-Potential-Competing-Bidders.aspx?csf=1&web=1&e=e4ZXoj"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">2210</div>
+        <div class="text">
+          Identify<br/>
+          Potential<br/>
+          Competing<br/>
+          Bidders
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2220--Assess-Likelihood-%26-Motivation.aspx?csf=1&web=1&e=KyZbQH"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">2220</div>
+        <div class="text">
+          Assess<br/>
+          Likelihood &amp;<br/>
+          Motivation
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2230--Analyze-Competitive-Advantage-%26-Vulnerabilities.aspx?csf=1&web=1&e=jH6Ykx"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">2230</div>
+        <div class="text">
+          Analyze<br/>
+          Competitive<br/>
+          Advantage &amp;<br/>
+          Vulnerabilities
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2240--Monitor-Market-Signals-%26-Intelligence.aspx?csf=1&web=1&e=pwHkhX"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">2240</div>
+        <div class="text">
+          Monitor<br/>
+          Market Signals<br/>
+          &amp; Intelligence
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2250--Develop-Defensive-Strategies-%26-Contingencies.aspx?csf=1&web=1&e=jyFW5V"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">2250</div>
+        <div class="text">
+          Develop<br/>
+          Defensive<br/>
+          Strategies &amp;<br/>
+          Contingencies
+        </div>
+      </a>
+
+      <!-- connector lines -->
+      <div class="h-line h12"></div>
+      <div class="h-line h23"></div>
+      <div class="h-line h34"></div>
+      <div class="h-line h45"></div>
+    </div>
+  </div>
+</body>
+</html>
