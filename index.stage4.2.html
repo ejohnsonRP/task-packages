@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Day 1 Preparation</title>
+
+  <style>
+    :root{
+      /* Yellow used everywhere */
+      --yellow: #f4b400;
+
+      --border: 3px solid var(--yellow);
+      --line: var(--yellow);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing */
+      --boxW: 90px;
+      --boxH: 110px;
+      --boxPad: 10px;
+
+      /* Spacing */
+      --gapX: 10px;
+
+      /* Typography (STANDARD across all pages) */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+
+      /* Layout helpers */
+      --flowTopPad: 10px;
+      --rowCenterY: calc(var(--flowTopPad) + (var(--boxH) / 2));
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+      background: #fff;
+    }
+
+    .header{
+      background: var(--yellow);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, var(--boxW));
+      column-gap: var(--gapX);
+      align-items: start;
+      padding-top: var(--flowTopPad);
+    }
+
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 400;
+      margin: 0 0 6px 0;
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    /* Straight connector lines */
+    .h-line{
+      position: absolute;
+      height: 2px;
+      background: var(--line);
+      top: var(--rowCenterY);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
+    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
+    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
+    .h45{ left: calc((var(--boxW) * 4) + (var(--gapX) * 3)); width: var(--gapX); }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Day 1 Preparation</div>
+
+    <div class="flow">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-4110--Verify-Closing-Conditions-and-Readiness.aspx?csf=1&web=1&e=WoRMsE"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">4110</div>
+        <div class="text">
+          Verify<br/>
+          Closing<br/>
+          Conditions<br/>
+          and<br/>
+          Readiness
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-4120--Prepare-Closing-Documentation-and-Mechanics.aspx?csf=1&web=1&e=aUfKxI"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">4120</div>
+        <div class="text">
+          Prepare<br/>
+          Closing<br/>
+          Documenta-<br/>
+          tion and<br/>
+          Mechanics
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-4130--Complete-Day-1-Operational-Preparations.aspx?csf=1&web=1&e=LBUOXV"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">4130</div>
+        <div class="text">
+          Complete Day<br/>
+          1 Operational<br/>
+          Preparations
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-4140--Arrange-Closing-Funding-and-Payment-Mechanics.aspx?csf=1&web=1&e=kODfp7"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">4140</div>
+        <div class="text">
+          Arrange<br/>
+          Closing<br/>
+          Funding and<br/>
+          Payment<br/>
+          Mechanics
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-4150--Finalize-Run-of-Show-and-Final-Readiness-Review.aspx?csf=1&web=1&e=7axJhl"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">4150</div>
+        <div class="text">
+          Finalize Run<br/>
+          of Show and<br/>
+          Final<br/>
+          Readiness<br/>
+          Review
+        </div>
+      </a>
+
+      <!-- connector lines -->
+      <div class="h-line h12"></div>
+      <div class="h-line h23"></div>
+      <div class="h-line h34"></div>
+      <div class="h-line h45"></div>
+    </div>
+  </div>
+</body>
+</html>
