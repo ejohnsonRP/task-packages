@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Preliminary Evaluation / Target Assessment</title>
+
+  <style>
+    :root{
+      --blue: #2f64f5;
+      --line: var(--blue);
+      --border: 2px solid var(--blue);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing (font sizes unchanged) */
+      --boxW: 85px;     /* tuned so ALL boxes fit including 1360 */
+      --boxH: 115px;
+      --boxPad: 8px;
+
+      /* Spacing */
+      --gapX: 8px;      /* tight so 5 columns fit */
+      --gapY: 12px;     /* between 1330 and 1340 */
+
+      /* Typography (unchanged) */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+
+      /* Flow padding */
+      --flowTopPad: 8px;
+
+      /* Y positions for stacked column */
+      --stackTopY: var(--flowTopPad);
+      --stackBottomY: calc(var(--flowTopPad) + var(--boxH) + var(--gapY));
+
+      --mid1330Y: calc(var(--stackTopY) + (var(--boxH) / 2));
+      --mid1340Y: calc(var(--stackBottomY) + (var(--boxH) / 2));
+      --midBetween: calc((var(--mid1330Y) + var(--mid1340Y)) / 2);
+
+      /* Side boxes centered between stacked boxes */
+      --sideOffset: calc(var(--midBetween) - (var(--boxH) / 2));
+
+      /* X positions for 5 columns:
+         col1: 1310
+         col2: 1320
+         col3: stacked 1330/1340
+         col4: 1350
+         col5: 1360
+      */
+      --c1Left: 0px;
+      --c2Left: calc(var(--boxW) + var(--gapX));
+      --c3Left: calc((var(--boxW) * 2) + (var(--gapX) * 2));
+      --c4Left: calc((var(--boxW) * 3) + (var(--gapX) * 3));
+      --c5Left: calc((var(--boxW) * 4) + (var(--gapX) * 4));
+
+      --c1Right: calc(var(--c1Left) + var(--boxW));
+      --c2Right: calc(var(--c2Left) + var(--boxW));
+      --c3Right: calc(var(--c3Left) + var(--boxW));
+      --c4Right: calc(var(--c4Left) + var(--boxW));
+
+      /* Junction for branching from 1320 to 1330/1340 */
+      --junctionX: calc(var(--c3Left) - (var(--gapX) / 2));
+
+      /* Merge point between stacked boxes and 1350 (placed midway in the gap)
+         This creates the “shared connector” look. */
+      --mergeX: calc(var(--c3Right) + (var(--gapX) / 2));
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+      background: #fff;
+    }
+
+    .header{
+      background: var(--blue);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, var(--boxW));
+      column-gap: var(--gapX);
+      align-items: start;
+      padding-top: var(--flowTopPad);
+    }
+
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2; /* above lines */
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 700;
+      margin: 0 0 5px 0;
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* Column placement */
+    .c1{ grid-column: 1; }
+    .c2{ grid-column: 2; }
+    .c3{ grid-column: 3; }
+    .c4{ grid-column: 4; }
+    .c5{ grid-column: 5; }
+
+    /* Move side boxes (1310/1320/1350/1360) down to center between 1330/1340 */
+    .mid-row{ padding-top: var(--sideOffset); }
+
+    /* Stacked middle column */
+    .stack{
+      display: grid;
+      row-gap: var(--gapY);
+    }
+
+    /* ===== Lines ===== */
+    .line{
+      position: absolute;
+      background: var(--line);
+      pointer-events: none; /* never steal clicks */
+      z-index: 1;
+    }
+    .h{ height: 2px; }
+    .v{ width: 2px; }
+
+    /* 1310 -> 1320 */
+    .l12{
+      left: var(--c1Right);
+      top: var(--midBetween);
+      width: var(--gapX);
+    }
+
+    /* 1320 -> junction */
+    .l2J{
+      left: var(--c2Right);
+      top: var(--midBetween);
+      width: calc(var(--junctionX) - var(--c2Right));
+    }
+
+    /* Vertical branch at junction between 1330 and 1340 */
+    .branchV{
+      left: var(--junctionX);
+      top: var(--mid1330Y);
+      height: calc(var(--mid1340Y) - var(--mid1330Y));
+    }
+
+    /* Junction -> 1330 */
+    .to1330{
+      left: var(--junctionX);
+      top: var(--mid1330Y);
+      width: calc(var(--c3Left) - var(--junctionX));
+    }
+
+    /* Junction -> 1340 */
+    .to1340{
+      left: var(--junctionX);
+      top: var(--mid1340Y);
+      width: calc(var(--c3Left) - var(--junctionX));
+    }
+
+    /* === NEW: Connect 1330 & 1340 into a shared merge point === */
+    .from1330toMerge{
+      left: var(--c3Right);
+      top: var(--mid1330Y);
+      width: calc(var(--mergeX) - var(--c3Right));
+    }
+
+    .from1340toMerge{
+      left: var(--c3Right);
+      top: var(--mid1340Y);
+      width: calc(var(--mergeX) - var(--c3Right));
+    }
+
+    .mergeV{
+      left: var(--mergeX);
+      top: var(--mid1330Y);
+      height: calc(var(--mid1340Y) - var(--mid1330Y));
+    }
+
+    /* Merge point -> 1350 (centered between stacked boxes) */
+    .mergeTo1350{
+      left: var(--mergeX);
+      top: var(--midBetween);
+      width: calc(var(--c4Left) - var(--mergeX));
+    }
+
+    /* 1350 -> 1360 */
+    .l45{
+      left: var(--c4Right);
+      top: var(--midBetween);
+      width: calc(var(--c5Left) - var(--c4Right));
+    }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Preliminary Evaluation / Target Assessment</div>
+
+    <div class="flow">
+      <!-- 1310 -->
+      <div class="c1 mid-row">
+        <a class="box-link"
+           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1310-.aspx?csf=1&web=1&e=0VJUHI"
+           target="_blank" rel="noopener noreferrer">
+          <div class="step">1310</div>
+          <div class="text">Conduct<br/>Management<br/>Meetings</div>
+        </a>
+      </div>
+
+      <!-- 1320 -->
+      <div class="c2 mid-row">
+        <a class="box-link"
+           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1320--Provide-Initial-Data-Room-Access.aspx?csf=1&web=1&e=Fjghll"
+           target="_blank" rel="noopener noreferrer">
+          <div class="step">1320</div>
+          <div class="text">Provide<br/>Initial Data<br/>Room Access</div>
+        </a>
+      </div>
+
+      <!-- Stacked 1330 / 1340 -->
+      <div class="c3 stack">
+        <a class="box-link"
+           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1330--Perform-Ini.aspx?csf=1&web=1&e=rj6Ikj"
+           target="_blank" rel="noopener noreferrer">
+          <div class="step">1330</div>
+          <div class="text">Perform<br/>Initial<br/>Financial<br/>Review</div>
+        </a>
+
+        <a class="box-link"
+           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1340--Execute-Cultural-Fit-Assessment.aspx?csf=1&web=1&e=ePrbmI"
+           target="_blank" rel="noopener noreferrer">
+          <div class="step">1340</div>
+          <div class="text">Execute<br/>Cultural Fit<br/>Assessment</div>
+        </a>
+      </div>
+
+      <!-- 1350 -->
+      <div class="c4 mid-row">
+        <a class="box-link"
+           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1350--Propose-High-level-Deal-Terms.aspx?csf=1&web=1&e=BBsg2c"
+           target="_blank" rel="noopener noreferrer">
+          <div class="step">1350</div>
+          <div class="text">Propose<br/>High-level<br/>Deal Terms</div>
+        </a>
+      </div>
+
+      <!-- 1360 -->
+      <div class="c5 mid-row">
+        <a class="box-link"
+           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1360-.aspx?csf=1&web=1&e=Cw8wmT"
+           target="_blank" rel="noopener noreferrer">
+          <div class="step">1360</div>
+          <div class="text">Sign Letter<br/>of Intent<br/>(LOI)</div>
+        </a>
+      </div>
+
+      <!-- Lines -->
+      <div class="line h l12" aria-hidden="true"></div>
+      <div class="line h l2J" aria-hidden="true"></div>
+      <div class="line v branchV" aria-hidden="true"></div>
+      <div class="line h to1330" aria-hidden="true"></div>
+      <div class="line h to1340" aria-hidden="true"></div>
+
+      <!-- NEW: 1330/1340 -> merge -> 1350 -->
+      <div class="line h from1330toMerge" aria-hidden="true"></div>
+      <div class="line h from1340toMerge" aria-hidden="true"></div>
+      <div class="line v mergeV" aria-hidden="true"></div>
+      <div class="line h mergeTo1350" aria-hidden="true"></div>
+
+      <div class="line h l45" aria-hidden="true"></div>
+    </div>
+  </div>
+</body>
+</html>
