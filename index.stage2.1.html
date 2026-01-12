@@ -40,7 +40,6 @@
       color: #000;
     }
 
-    /* 500x500 frame */
     .frame{
       width: var(--frameW);
       height: var(--frameH);
@@ -52,7 +51,6 @@
       box-sizing: border-box;
     }
 
-    /* Header bar */
     .header{
       background: var(--teal);
       color: #fff;
@@ -62,7 +60,6 @@
       margin-bottom: 18px;
     }
 
-    /* Flow layout */
     .flow{
       position: relative;
       display: grid;
@@ -106,7 +103,7 @@
       height: 2px;
       background: var(--line);
       top: calc(8px + (var(--boxH) / 2));
-      pointer-events: none;
+      pointer-events: none; /* do not block clicks */
       z-index: 1;
     }
 
@@ -122,7 +119,9 @@
     <div class="header">Valuation</div>
 
     <div class="flow">
-      <div class="box-link">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2010--Gather-and-Nor.aspx?csf=1&web=1&e=qwjjZU"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">2010</div>
         <div class="text">
           Gather and<br/>
@@ -130,9 +129,11 @@
           Financial<br/>
           Data
         </div>
-      </div>
+      </a>
 
-      <div class="box-link">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package(1).aspx?csf=1&web=1&e=mkeVA9"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">2020</div>
         <div class="text">
           Perform<br/>
@@ -140,9 +141,11 @@
           Company<br/>
           Analysis
         </div>
-      </div>
+      </a>
 
-      <div class="box-link">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2030--Conduct-Precedent-Transaction-Analysis.aspx?csf=1&web=1&e=wdBzB2"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">2030</div>
         <div class="text">
           Conduct<br/>
@@ -150,9 +153,11 @@
           Transaction<br/>
           Analysis
         </div>
-      </div>
+      </a>
 
-      <div class="box-link">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2040--Build-Discounted-Cash-Flow-(DCF)-Model.aspx?csf=1&web=1&e=ynggMW"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">2040</div>
         <div class="text">
           Build<br/>
@@ -160,9 +165,11 @@
           Cash Flow<br/>
           (DCF) Model
         </div>
-      </div>
+      </a>
 
-      <div class="box-link">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2050--Synthesize-Valuation-Range-%26-Recommend.aspx?csf=1&web=1&e=GFEcMR"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">2050</div>
         <div class="text">
           Synthesize<br/>
@@ -170,7 +177,7 @@
           Range &amp;<br/>
           Recommend
         </div>
-      </div>
+      </a>
 
       <!-- connector lines -->
       <div class="h-line h12"></div>
@@ -181,3 +188,4 @@
   </div>
 </body>
 </html>
+
