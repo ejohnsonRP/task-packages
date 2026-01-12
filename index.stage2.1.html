@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valuation</title>
+
+  <style>
+    :root{
+      /* Teal used everywhere */
+      --teal: #0a9b8a;
+
+      /* Shared styling */
+      --line: var(--teal);
+      --border: 2px solid var(--teal);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing */
+      --boxW: 85px;
+      --boxH: 115px;
+      --boxPad: 8px;
+
+      /* Spacing */
+      --gapX: 8px;
+
+      /* Typography (UNCHANGED) */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    /* 500x500 frame */
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    /* Header bar */
+    .header{
+      background: var(--teal);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    /* Flow layout */
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, var(--boxW));
+      column-gap: var(--gapX);
+      align-items: start;
+      padding-top: 8px;
+    }
+
+    /* Clickable box */
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 700;
+      margin: 0 0 5px 0;
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* Connector lines */
+    .h-line{
+      position: absolute;
+      height: 2px;
+      background: var(--line);
+      top: calc(8px + (var(--boxH) / 2));
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
+    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
+    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
+    .h45{ left: calc((var(--boxW) * 4) + (var(--gapX) * 3)); width: var(--gapX); }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Valuation</div>
+
+    <div class="flow">
+      <div class="box-link">
+        <div class="step">2010</div>
+        <div class="text">
+          Gather and<br/>
+          Normalize<br/>
+          Financial<br/>
+          Data
+        </div>
+      </div>
+
+      <div class="box-link">
+        <div class="step">2020</div>
+        <div class="text">
+          Perform<br/>
+          Comparable<br/>
+          Company<br/>
+          Analysis
+        </div>
+      </div>
+
+      <div class="box-link">
+        <div class="step">2030</div>
+        <div class="text">
+          Conduct<br/>
+          Precedent<br/>
+          Transaction<br/>
+          Analysis
+        </div>
+      </div>
+
+      <div class="box-link">
+        <div class="step">2040</div>
+        <div class="text">
+          Build<br/>
+          Discounted<br/>
+          Cash Flow<br/>
+          (DCF) Model
+        </div>
+      </div>
+
+      <div class="box-link">
+        <div class="step">2050</div>
+        <div class="text">
+          Synthesize<br/>
+          Valuation<br/>
+          Range &amp;<br/>
+          Recommend
+        </div>
+      </div>
+
+      <!-- connector lines -->
+      <div class="h-line h12"></div>
+      <div class="h-line h23"></div>
+      <div class="h-line h34"></div>
+      <div class="h-line h45"></div>
+    </div>
+  </div>
+</body>
+</html>
