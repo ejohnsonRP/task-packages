@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Board Approval</title>
+
+  <style>
+    :root{
+      /* Green used everywhere (matches your green stages) */
+      --green: #0aa84f;
+
+      --border: 3px solid var(--green);
+      --line: var(--green);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing */
+      --boxW: 90px;
+      --boxH: 110px;
+      --boxPad: 10px;
+
+      /* Spacing */
+      --gapX: 10px;
+
+      /* Typography (STANDARD across all pages) */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+
+      /* Layout helpers */
+      --flowTopPad: 10px;
+      --rowCenterY: calc(var(--flowTopPad) + (var(--boxH) / 2));
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+      background: #fff;
+    }
+
+    .header{
+      background: var(--green);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, var(--boxW));
+      column-gap: var(--gapX);
+      align-items: start;
+      padding-top: var(--flowTopPad);
+    }
+
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 400;
+      margin: 0 0 6px 0;
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    /* Straight connector lines */
+    .h-line{
+      position: absolute;
+      height: 2px;
+      background: var(--line);
+      top: var(--rowCenterY);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
+    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
+    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
+    .h45{ left: calc((var(--boxW) * 4) + (var(--gapX) * 3)); width: var(--gapX); }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Board Approval</div>
+
+    <div class="flow">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3310--Prepare-Board-Materials-Package.aspx?csf=1&web=1&e=4Dugms"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">3310</div>
+        <div class="text">
+          Prepare<br/>
+          Board<br/>
+          Materials<br/>
+          Package
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3320--Conduct-Management-Readiness-and-Pre-reads.aspx?csf=1&web=1&e=xxer5F"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">3320</div>
+        <div class="text">
+          Conduct<br/>
+          Management<br/>
+          Readiness<br/>
+          and Pre-<br/>
+          reads
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3330--Secure-Required-Board-Approvals.aspx?csf=1&web=1&e=TQE8bF"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">3330</div>
+        <div class="text">
+          Secure<br/>
+          Required<br/>
+          Board<br/>
+          Approvals
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3340--Document-Board-Resolutions-and-Governance.aspx?csf=1&web=1&e=8E9pyU"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">3340</div>
+        <div class="text">
+          Document<br/>
+          Board<br/>
+          Resolutions<br/>
+          and<br/>
+          Governance
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3350--Communicate-Approval-and-Launch-Closing-Process.aspx?csf=1&web=1&e=N8A95l"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">3350</div>
+        <div class="text">
+          Communicate<br/>
+          Approval and<br/>
+          Launch<br/>
+          Closing<br/>
+          Process
+        </div>
+      </a>
+
+      <!-- connector lines -->
+      <div class="h-line h12"></div>
+      <div class="h-line h23"></div>
+      <div class="h-line h34"></div>
+      <div class="h-line h45"></div>
+    </div>
+  </div>
+</body>
+</html>
