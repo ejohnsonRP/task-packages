@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Communications Execution</title>
+
+  <style>
+    :root{
+      /* Purple theme */
+      --purple: #6a2ca0;
+
+      --line: var(--purple);
+      --border: 2px solid var(--purple);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing */
+      --boxW: 85px;
+      --boxH: 115px;
+      --boxPad: 8px;
+
+      /* Spacing */
+      --gapX: 10px;
+
+      /* Typography */
+      --headerFont: 15px;
+      --stepFont: 11px;
+      --textFont: 9.2px;
+
+      /* Middle baseline for connectors */
+      --yMid: 95px;
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .header{
+      background: var(--purple);
+      color: #fff;
+      padding: 6px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    /* Single-row flow (3 boxes) */
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, var(--boxW));
+      column-gap: var(--gapX);
+      align-items: start;
+      padding-top: 10px;
+    }
+
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 700;
+      margin: 0 0 5px 0;
+      color: var(--purple);
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* Connector line primitive */
+    .h-line{
+      position: absolute;
+      height: 2px;
+      background: var(--line);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Placement */
+    .b7310{ grid-column: 1; }
+    .b7320{ grid-column: 2; }
+    .b7330{ grid-column: 3; }
+
+    /* Connectors */
+    .l12{
+      left: var(--boxW);
+      top: var(--yMid);
+      width: var(--gapX);
+    }
+    .l23{
+      left: calc((var(--boxW) * 2) + var(--gapX));
+      top: var(--yMid);
+      width: var(--gapX);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Communications Execution</div>
+
+    <div class="flow">
+      <!-- Boxes (clickable later) -->
+      <a class="box-link b7310" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">7310</div>
+        <div class="text">
+          Execute<br/>
+          Communicati<br/>
+          ons Plan
+        </div>
+      </a>
+
+      <a class="box-link b7320" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">7320</div>
+        <div class="text">
+          Measure<br/>
+          Progress<br/>
+          Along the<br/>
+          Commitment<br/>
+          Curve
+        </div>
+      </a>
+
+      <a class="box-link b7330" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">7330</div>
+        <div class="text">
+          Monitor<br/>
+          Effectiveness<br/>
+          and Make<br/>
+          Changes
+        </div>
+      </a>
+
+      <!-- Lines -->
+      <div class="h-line l12"></div>
+      <div class="h-line l23"></div>
+    </div>
+  </div>
+
+  <script>
+    /* optional: prevent # jump while prototyping */
+    document.querySelectorAll('a.box-link[href="#"]').forEach(a=>{
+      a.addEventListener('click', e => e.preventDefault());
+    });
+  </script>
+</body>
+</html>
