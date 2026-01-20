@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Formulate Bridging Initiatives</title>
+
+  <style>
+    :root{
+      /* Purple theme */
+      --purple: #6a2ca0;
+
+      --line: var(--purple);
+      --border: 2px solid var(--purple);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing */
+      --boxW: 85px;
+      --boxH: 115px;
+      --boxPad: 8px;
+
+      /* Spacing */
+      --gapX: 10px;
+
+      /* Typography */
+      --headerFont: 15px;
+      --stepFont: 11px;
+      --textFont: 9.2px;
+
+      /* Middle baseline for connectors */
+      --yMid: 95px;
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .header{
+      background: var(--purple);
+      color: #fff;
+      padding: 6px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    /* Single-row flow (5 boxes) */
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, var(--boxW));
+      column-gap: var(--gapX);
+      align-items: start;
+      padding-top: 10px;
+    }
+
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 700;
+      margin: 0 0 5px 0;
+      color: var(--purple);
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* Connector line primitive */
+    .h-line{
+      position: absolute;
+      height: 2px;
+      background: var(--line);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Placement */
+    .b7410{ grid-column: 1; }
+    .b7420{ grid-column: 2; }
+    .b7430{ grid-column: 3; }
+    .b7440{ grid-column: 4; }
+    .b7450{ grid-column: 5; }
+
+    /* Connectors between boxes */
+    .l12{
+      left: var(--boxW);
+      top: var(--yMid);
+      width: var(--gapX);
+    }
+    .l23{
+      left: calc((var(--boxW) * 2) + var(--gapX));
+      top: var(--yMid);
+      width: var(--gapX);
+    }
+    .l34{
+      left: calc((var(--boxW) * 3) + (var(--gapX) * 2));
+      top: var(--yMid);
+      width: var(--gapX);
+    }
+    .l45{
+      left: calc((var(--boxW) * 4) + (var(--gapX) * 3));
+      top: var(--yMid);
+      width: var(--gapX);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Formulate Bridging Initiatives</div>
+
+    <div class="flow">
+      <!-- Boxes (clickable later) -->
+      <a class="box-link b7410" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">7410</div>
+        <div class="text">
+          Define target<br/>
+          state<br/>
+          operating<br/>
+          model and<br/>
+          cultural<br/>
+          aspiration
+        </div>
+      </a>
+
+      <a class="box-link b7420" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">7420</div>
+        <div class="text">
+          Identify &amp;<br/>
+          prioritize gaps
+        </div>
+      </a>
+
+      <a class="box-link b7430" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">7430</div>
+        <div class="text">
+          Design<br/>
+          Bridging<br/>
+          Initiatives
+        </div>
+      </a>
+
+      <a class="box-link b7440" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">7440</div>
+        <div class="text">
+          Validate and<br/>
+          Secure<br/>
+          Approval with<br/>
+          Leadership
+        </div>
+      </a>
+
+      <a class="box-link b7450" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">7450</div>
+        <div class="text">
+          Mobilize for<br/>
+          Implementation
+        </div>
+      </a>
+
+      <!-- Lines -->
+      <div class="h-line l12"></div>
+      <div class="h-line l23"></div>
+      <div class="h-line l34"></div>
+      <div class="h-line l45"></div>
+    </div>
+  </div>
+
+  <script>
+    /* optional: prevent # jump while prototyping */
+    document.querySelectorAll('a.box-link[href="#"]').forEach(a=>{
+      a.addEventListener('click', e => e.preventDefault());
+    });
+  </script>
+</body>
+</html>
