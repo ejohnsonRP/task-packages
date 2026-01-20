@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mobilize Program</title>
+
+  <style>
+    :root{
+      /* Navy theme (requested) */
+      --navy: #0b2a66;
+
+      --line: var(--navy);
+      --border: 2px solid var(--navy);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing (same template scale) */
+      --boxW: 85px;
+      --boxH: 115px;
+      --boxPad: 8px;
+
+      /* Spacing */
+      --gapX: 8px;
+      --rowGap: 18px;
+
+      /* Typography */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+
+      /* Y centers for each row inside .flow (used for lines/brackets) */
+      --y1: calc(8px + (var(--boxH) / 2));
+      --y2: calc(8px + var(--boxH) + var(--rowGap) + (var(--boxH) / 2));
+      --y3: calc(8px + (var(--boxH) * 2) + (var(--rowGap) * 2) + (var(--boxH) / 2));
+
+      /* X anchors for columns (grid math) */
+      --col1Start: 0px;
+      --col2Start: calc(var(--boxW) + var(--gapX));
+      --col3Start: calc((var(--boxW) * 2) + (var(--gapX) * 2));
+      --col4Start: calc((var(--boxW) * 3) + (var(--gapX) * 3));
+      --col5Start: calc((var(--boxW) * 4) + (var(--gapX) * 4));
+
+      --col1Right: calc(var(--col1Start) + var(--boxW));
+      --col2Right: calc(var(--col2Start) + var(--boxW));
+      --col3Right: calc(var(--col3Start) + var(--boxW));
+
+      /* Bracket geometry */
+      --bracketOffset: 6px; /* distance from box edge to bracket spine */
+      --armLen: 10px;       /* bracket arm length */
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .header{
+      background: var(--navy);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, var(--boxW));
+      grid-template-rows: repeat(3, var(--boxH));
+      column-gap: var(--gapX);
+      row-gap: var(--rowGap);
+      align-items: start;
+      padding-top: 8px;
+    }
+
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 700;
+      margin: 0 0 5px 0;
+      color: var(--navy);
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* Placement (matches screenshot structure) */
+    .b6110{ grid-column: 1; grid-row: 2; }
+
+    .b6120{ grid-column: 2; grid-row: 1; }
+    .b6130{ grid-column: 2; grid-row: 2; }
+    .b6140{ grid-column: 2; grid-row: 3; }
+
+    .b6150{ grid-column: 3; grid-row: 2; }
+
+    /* connector primitives */
+    .h-line, .v-line{
+      position: absolute;
+      background: var(--line);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .h-line{ height: 2px; }
+    .v-line{ width: 2px; }
+
+    /* Horizontal line: 6110 -> bracket -> 6130 -> 6150 */
+    .h12{
+      left: var(--col1Right);
+      top: var(--y2);
+      width: var(--gapX);
+    }
+    .h23{
+      left: var(--col2Right);
+      top: var(--y2);
+      width: var(--gapX);
+    }
+
+    /* Clean bracket around the stacked column (6120/6130/6140)
+       bracket on LEFT side of column 2 stack */
+    .c-spine{
+      left: calc(var(--col2Start) - var(--bracketOffset));
+      top: var(--y1);
+      height: calc(var(--y3) - var(--y1));
+    }
+    .c-arm-top{
+      left: calc(var(--col2Start) - var(--bracketOffset));
+      top: var(--y1);
+      width: var(--armLen);
+    }
+    .c-arm-bot{
+      left: calc(var(--col2Start) - var(--bracketOffset));
+      top: var(--y3);
+      width: var(--armLen);
+    }
+
+    /* Join from 6110 into bracket spine */
+    .c-join{
+      left: calc(var(--col1Right) + var(--gapX));
+      top: var(--y2);
+      width: calc(var(--col2Start) - (var(--col1Right) + var(--gapX)) - var(--bracketOffset));
+    }
+
+    /* Join from bracket to 6150 (from 6130 box right edge to col3 start)
+       NOTE: we already draw h23 between col2 and col3 as the gap line;
+       this is enough visually per your template style.
+    */
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Mobilize Program</div>
+
+    <div class="flow">
+      <!-- Boxes (clickable; links added later) -->
+      <a class="box-link b6110" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6110</div>
+        <div class="text">
+          Establish<br/>
+          Integration<br/>
+          Management<br/>
+          Office (IMO)
+        </div>
+      </a>
+
+      <a class="box-link b6120" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6120</div>
+        <div class="text">
+          Implement<br/>
+          Management<br/>
+          Processes
+        </div>
+      </a>
+
+      <a class="box-link b6130" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6130</div>
+        <div class="text">
+          Implement<br/>
+          Weekly<br/>
+          Meeting<br/>
+          Cadence
+        </div>
+      </a>
+
+      <a class="box-link b6140" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6140</div>
+        <div class="text">
+          Obtain &amp;<br/>
+          Deploy<br/>
+          Budget &amp;<br/>
+          Resources
+        </div>
+      </a>
+
+      <a class="box-link b6150" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6150</div>
+        <div class="text">
+          Conduct<br/>
+          Orientation &amp;<br/>
+          Training
+        </div>
+      </a>
+
+      <!-- Connector lines -->
+      <div class="h-line h12"></div>
+
+      <!-- Clean bracket + join -->
+      <div class="h-line c-join"></div>
+      <div class="v-line c-spine"></div>
+      <div class="h-line c-arm-top"></div>
+      <div class="h-line c-arm-bot"></div>
+
+      <!-- col2 -> col3 gap line -->
+      <div class="h-line h23"></div>
+    </div>
+  </div>
+
+  <script>
+    /* optional: prevent # jump while prototyping */
+    document.querySelectorAll('a.box-link[href="#"]').forEach(a=>{
+      a.addEventListener('click', e => e.preventDefault());
+    });
+  </script>
+</body>
+</html>
