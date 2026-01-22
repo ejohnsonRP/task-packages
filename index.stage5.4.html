@@ -1,120 +1,144 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Post Deal Review</title>
 
   <style>
     :root{
-      /* Red used everywhere */
-      --red: #c00000;
+      /* Dark red theme */
+      --red:#8b0000;
 
-      --border: 3px solid var(--red);
-      --line: var(--red);
+      /* EXACT Stage 7.5 spacing */
+      --gap:6px;
+      --pad:6px;
 
-      /* Fixed viewport */
-      --frameW: 500px;
-      --frameH: 500px;
+      /* computed (fallbacks if JS is blocked) */
+      --box:110px;
+      --mid:55px;
+      --flowW:580px;
 
-      /* Box sizing */
-      --boxW: 90px;
-      --boxH: 110px;
-      --boxPad: 10px;
-
-      /* Spacing */
-      --gapX: 10px;
-
-      /* Typography (STANDARD across all pages) */
-      --headerFont: 17px;
-      --stepFont: 11px;
-      --textFont: 9.5px;
-
-      /* Layout helpers */
-      --flowTopPad: 10px;
-      --rowCenterY: calc(var(--flowTopPad) + (var(--boxH) / 2));
+      /* EXACT Stage 7.5 fonts */
+      --headerFont:15px;
+      --stepFont:11px;
+      --textFont:9.2px;
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #000;
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
+    /* Make the "screen" longer: do NOT clamp the container */
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
-      background: #fff;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      background:#fff;
+      /* removed max-width/max-height and overflow:hidden */
     }
 
+    /* Header matches Stage 7.5 (but red theme) */
     .header{
-      background: var(--red);
-      color: #fff;
-      padding: 8px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 18px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      width:var(--flowW);
+      background:var(--red);
+      color:#fff;
+      padding:6px 12px;
+      font-size:var(--headerFont);
+      font-weight:700;
+      box-sizing:border-box;
+      margin-bottom:14px;
     }
 
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(5, var(--boxW));
-      column-gap: var(--gapX);
-      align-items: start;
-      padding-top: var(--flowTopPad);
+      position:relative;
+      width:var(--flowW);
+      display:grid;
+      grid-template-columns:repeat(5,var(--box));
+      gap:0 var(--gap);
+      align-items:start;
+      padding-top:6px; /* exact Stage 7.5 */
     }
 
     .box{
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      background: #fff;
-      line-height: 1.15;
-      position: relative;
-      z-index: 2;
+      width:var(--box);
+      height:var(--box);            /* perfect square */
+      border:2px solid var(--red);
+      padding:var(--pad);
+      box-sizing:border-box;
+      background:#fff;
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;              /* ripple stays inside */
+      transition:background-color 120ms ease, transform 80ms ease;
+      outline:none;
+      z-index:1;
+    }
+
+    /* Hover = lighter INSIDE */
+    .box:hover{ background:rgba(139,0,0,.08); }
+    .box:active{
+      transform:scale(.99);
+      background:rgba(139,0,0,.12);
+    }
+
+    .box:focus-visible{
+      box-shadow:0 0 0 3px rgba(139,0,0,.25);
     }
 
     .step{
-      font-size: var(--stepFont);
-      font-weight: 400;
-      margin: 0 0 6px 0;
+      margin:0 0 5px 0;
+      font-size:var(--stepFont);
+      font-weight:700;
+      color:var(--red);
+      white-space:nowrap;
     }
 
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
-      margin: 0;
-      overflow-wrap: anywhere;
+      margin:0;
+      font-size:var(--textFont);
+      line-height:1.15;
+      white-space:nowrap;
     }
 
-    /* Straight connector lines */
-    .h-line{
-      position: absolute;
-      height: 2px;
-      background: var(--line);
-      top: var(--rowCenterY);
-      pointer-events: none;
-      z-index: 1;
+    /* Connector lines */
+    .line{
+      position:absolute;
+      height:2px;
+      background:var(--red);
+      top:var(--mid);
+      pointer-events:none;
+      z-index:0;
     }
+    .line.l12{ left:var(--box); width:var(--gap); }
+    .line.l23{ left:calc(var(--box) * 2 + var(--gap)); width:var(--gap); }
+    .line.l34{ left:calc(var(--box) * 3 + var(--gap) * 2); width:var(--gap); }
+    .line.l45{ left:calc(var(--box) * 4 + var(--gap) * 3); width:var(--gap); }
 
-    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
-    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
-    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
-    .h45{ left: calc((var(--boxW) * 4) + (var(--gapX) * 3)); width: var(--gapX); }
+    /* Click ripple */
+    .box::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(139,0,0,.25);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
+    }
+    .box.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{opacity:.9; transform:translate(-50%,-50%) scale(1);}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(18);}
+    }
   </style>
 </head>
 
@@ -122,8 +146,10 @@
   <div class="frame">
     <div class="header">Post Deal Review</div>
 
-    <div class="flow">
-      <div class="box">
+    <div class="flow" id="flow">
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-5310--Conduct-Financial-Performance-Assessment.aspx?csf=1&web=1&e=mNE01i"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">5310</div>
         <div class="text">
           Conduct<br/>
@@ -131,29 +157,34 @@
           Performance<br/>
           Assessment
         </div>
-      </div>
+      </a>
 
-      <div class="box">
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-5320--Eva.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">5320</div>
         <div class="text">
           Evaluate<br/>
           Integration<br/>
           Execution<br/>
-          Effective-<br/>
-          ness
+          Effectiveness
         </div>
-      </div>
+      </a>
 
-      <div class="box">
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-5330--Capture.aspx?csf=1&web=1&e=19SH2i"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">5330</div>
         <div class="text">
           Capture<br/>
           Lessons<br/>
           Learned
         </div>
-      </div>
+      </a>
 
-      <div class="box">
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-5340--Document-Post-Deal-Review-Report.aspx?csf=1&web=1&e=jE5g2p"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">5340</div>
         <div class="text">
           Document<br/>
@@ -161,24 +192,81 @@
           Review<br/>
           Report
         </div>
-      </div>
+      </a>
 
-      <div class="box">
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-5350--Implement-Process-Improvements.aspx?csf=1&web=1&e=JMdeNf"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">5350</div>
         <div class="text">
           Implement<br/>
           Process<br/>
-          Improve-<br/>
-          ments
+          Improvements
         </div>
-      </div>
+      </a>
 
-      <!-- connector lines -->
-      <div class="h-line h12"></div>
-      <div class="h-line h23"></div>
-      <div class="h-line h34"></div>
-      <div class="h-line h45"></div>
+      <div class="line l12" aria-hidden="true"></div>
+      <div class="line l23" aria-hidden="true"></div>
+      <div class="line l34" aria-hidden="true"></div>
+      <div class="line l45" aria-hidden="true"></div>
     </div>
   </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const flow = document.getElementById("flow");
+      const boxes = [...document.querySelectorAll(".box")];
+      const setVar = (k, v) => root.style.setProperty(k, v);
+
+      function fitSquares() {
+        // Stage 7.5 behavior: smallest uniform square that fits the largest content.
+        const prev = boxes.map(b => ({ w: b.style.width, h: b.style.height }));
+        boxes.forEach(b => { b.style.width = "auto"; b.style.height = "auto"; });
+        void flow.offsetWidth;
+
+        let maxW = 0, maxH = 0;
+        for (const b of boxes) {
+          const r = b.getBoundingClientRect();
+          if (r.width > maxW) maxW = r.width;
+          if (r.height > maxH) maxH = r.height;
+        }
+
+        const size = Math.ceil(Math.max(maxW, maxH));
+        const gap = parseFloat(getComputedStyle(root).getPropertyValue("--gap")) || 6;
+
+        setVar("--box", size + "px");
+        setVar("--flowW", ((size * 5) + (gap * 4)) + "px");
+        setVar("--mid", Math.round(size / 2) + "px");
+
+        boxes.forEach((b, i) => { b.style.width = prev[i].w; b.style.height = prev[i].h; });
+      }
+
+      function clickRipple() {
+        for (const box of boxes) {
+          box.addEventListener("pointerdown", (e) => {
+            const r = box.getBoundingClientRect();
+            box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+            box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+            box.classList.remove("ripple");
+            void box.offsetWidth;
+            box.classList.add("ripple");
+          });
+          box.addEventListener("animationend", () => box.classList.remove("ripple"));
+        }
+      }
+
+      window.addEventListener("load", () => {
+        fitSquares();
+        clickRipple();
+      });
+
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__fitT);
+        window.__fitT = setTimeout(fitSquares, 80);
+      });
+    })();
+  </script>
 </body>
 </html>
+
