@@ -1,135 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cultural Assessment & Diagnostic</title>
 
   <style>
     :root{
-      /* Purple theme */
-      --purple: #6a2ca0;
+      --purple:#6a2ca0;
 
-      --line: var(--purple);
-      --border: 2px solid var(--purple);
+      /* Compact layout */
+      --gap:6px;
+      --pad:6px;
 
-      /* Fixed viewport */
-      --frameW: 500px;
-      --frameH: 500px;
+      /* FORCE smaller square boxes so all 5 fit */
+      --box:84px;
 
-      /* Box sizing */
-      --boxW: 85px;
-      --boxH: 115px;
-      --boxPad: 8px;
-
-      /* Spacing */
-      --gapX: 10px;
-
-      /* Typography */
-      --headerFont: 15px;
-      --stepFont: 11px;
-      --textFont: 9.2px;
-
-      /* Middle baseline for connectors */
-      --yMid: 95px;
+      /* computed from box size */
+      --mid:42px;
+      --flowW:444px;
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #000;
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      max-width:500px;
+      max-height:500px;
+      overflow:hidden;
     }
 
+    /* Purple bar only as wide as boxes */
     .header{
-      background: var(--purple);
-      color: #fff;
-      padding: 6px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 18px;
+      width:var(--flowW);
+      background:var(--purple);
+      color:#fff;
+      padding:6px 12px;
+      font-size:15px; /* keep */
+      font-weight:700;
+      box-sizing:border-box;
+      margin-bottom:14px;
     }
 
-    /* Single-row flow */
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(4, var(--boxW));
-      column-gap: var(--gapX);
-      align-items: start;
-      padding-top: 10px;
+      position:relative;
+      width:var(--flowW);
+      display:grid;
+      grid-template-columns:repeat(5,var(--box));
+      gap:0 var(--gap);
+      align-items:start;
+      padding-top:6px;
     }
 
-    .box-link{
-      display: block;
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      background: #fff;
-      text-decoration: none;
-      color: inherit;
-      line-height: 1.15;
-      position: relative;
-      z-index: 2;
+    .box{
+      width:var(--box);
+      height:var(--box);            /* perfect square */
+      border:2px solid var(--purple);
+      padding:var(--pad);
+      box-sizing:border-box;
+      background:#fff;
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;              /* ripple stays inside */
+      transition:background-color 120ms ease, transform 80ms ease;
+      outline:none;
+      z-index:1;
+    }
+
+    /* lighter INSIDE on hover */
+    .box:hover{ background:rgba(106,44,160,.08); }
+
+    .box:active{
+      transform:scale(.99);
+      background:rgba(106,44,160,.12);
+    }
+
+    .box:focus-visible{
+      box-shadow:0 0 0 3px rgba(106,44,160,.25);
     }
 
     .step{
-      font-size: var(--stepFont);
-      font-weight: 700;
-      margin: 0 0 5px 0;
-      color: var(--purple);
+      margin:0 0 5px 0;
+      font-size:11px;  /* keep */
+      font-weight:700;
+      color:var(--purple);
+      white-space:nowrap;
     }
 
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
-      margin: 0;
+      margin:0;
+      font-size:9.2px; /* keep */
+      line-height:1.15;
+      white-space:nowrap;
     }
 
-    /* Connector line primitive */
-    .h-line{
-      position: absolute;
-      height: 2px;
-      background: var(--line);
-      pointer-events: none;
-      z-index: 1;
+    /* connector lines */
+    .line{
+      position:absolute;
+      height:2px;
+      background:var(--purple);
+      top:var(--mid);
+      pointer-events:none;
+      z-index:0;
     }
+    .line.l12{ left:var(--box); width:var(--gap); }
+    .line.l23{ left:calc(var(--box) * 2 + var(--gap)); width:var(--gap); }
+    .line.l34{ left:calc(var(--box) * 3 + var(--gap) * 2); width:var(--gap); }
+    .line.l45{ left:calc(var(--box) * 4 + var(--gap) * 3); width:var(--gap); }
 
-    /* Placement */
-    .b7110{ grid-column: 1; }
-    .b7120{ grid-column: 2; }
-    .b7130{ grid-column: 3; }
-    .b7140{ grid-column: 4; }
-
-    /* Connectors */
-    .l12{
-      left: var(--boxW);
-      top: var(--yMid);
-      width: var(--gapX);
+    /* click ripple */
+    .box::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(106,44,160,.25);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
     }
-    .l23{
-      left: calc((var(--boxW) * 2) + var(--gapX));
-      top: var(--yMid);
-      width: var(--gapX);
-    }
-    .l34{
-      left: calc((var(--boxW) * 3) + (var(--gapX) * 2));
-      top: var(--yMid);
-      width: var(--gapX);
+    .box.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{opacity:.9; transform:translate(-50%,-50%) scale(1);}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(18);}
     }
   </style>
 </head>
@@ -138,65 +143,94 @@
   <div class="frame">
     <div class="header">Cultural Assessment &amp; Diagnostic</div>
 
-      <div class="flow">
-    <!-- Boxes (clickable) -->
-    <a class="box-link b7110" href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-71170--Assess-%26-Prioritize-Stakeholder-Segments-%26-Change-Impact.aspx?csf=1&web=1&e=yonefP" target="_blank" rel="noopener noreferrer">
-      <div class="step">7110</div>
-      <div class="text">
-        Assess &amp;<br/>
-        Prioritize<br/>
-        Stakeholder<br/>
-        Segments &amp;<br/>
-        Change Impact
-      </div>
-    </a>
-  
-    <a class="box-link b7120" href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-7120--Define-Current-State-Culture-(process,-norms,-and-values).aspx?csf=1&web=1&e=e8UNcV" target="_blank" rel="noopener noreferrer">
-      <div class="step">7120</div>
-      <div class="text">
-        Define<br/>
-        Current-<br/>
-        State Culture<br/>
-        (process,<br/>
-        norms, and<br/>
-        values)
-      </div>
-    </a>
-  
-    <a class="box-link b7130" href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-7130--Capture-%26-Evaluate-Stakeholder-Sentiment.aspx?csf=1&web=1&e=yfqCkW" target="_blank" rel="noopener noreferrer">
-      <div class="step">7130</div>
-      <div class="text">
-        Capture &amp;<br/>
-        Evaluate<br/>
-        Stakeholder<br/>
-        Sentiment
-      </div>
-    </a>
-  
-    <a class="box-link b7140" href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-7140--Identify-Cultural-Friction-Points.aspx?csf=1&web=1&e=LkGTLE" target="_blank" rel="noopener noreferrer">
-      <div class="step">7140</div>
-      <div class="text">
-        Identify<br/>
-        Cultural<br/>
-        Friction<br/>
-        Points
-      </div>
-    </a>
-  
-    <!-- Lines -->
-    <div class="h-line l12"></div>
-    <div class="h-line l23"></div>
-    <div class="h-line l34"></div>
-  </div>
+    <div class="flow">
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-71170--Assess-%26-Prioritize-Stakeholder-Segments-%26-Change-Impact.aspx?csf=1&web=1&e=yonefP"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">7110</div>
+        <div class="text">
+          Assess &amp;<br/>
+          Prioritize<br/>
+          Stakeholder<br/>
+          Segments &amp;<br/>
+          Change Impact
+        </div>
+      </a>
 
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-7120--Define-Current-State-Culture-(process,-norms,-and-values).aspx?csf=1&web=1&e=e8UNcV"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">7120</div>
+        <div class="text">
+          Define<br/>
+          Current-<br/>
+          State Culture<br/>
+          (process,<br/>
+          norms, and<br/>
+          values)
+        </div>
+      </a>
+
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-7130--Capture-%26-Evaluate-Stakeholder-Sentiment.aspx?csf=1&web=1&e=yfqCkW"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">7130</div>
+        <div class="text">
+          Capture &amp;<br/>
+          Evaluate<br/>
+          Stakeholder<br/>
+          Sentiment
+        </div>
+      </a>
+
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-7140--Identify-Cultural-Friction-Points.aspx?csf=1&web=1&e=LkGTLE"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">7140</div>
+        <div class="text">
+          Identify<br/>
+          Cultural<br/>
+          Friction<br/>
+          Points
+        </div>
+      </a>
+
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-7210--Design-and-Activate-Change-%26-Communication-Principles.aspx?csf=1&web=1&e=djp6R8"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">7210</div>
+        <div class="text">
+          Design and<br/>
+          Activate<br/>
+          Change &amp;<br/>
+          Communication<br/>
+          Principles
+        </div>
+      </a>
+
+      <div class="line l12" aria-hidden="true"></div>
+      <div class="line l23" aria-hidden="true"></div>
+      <div class="line l34" aria-hidden="true"></div>
+      <div class="line l45" aria-hidden="true"></div>
+    </div>
   </div>
 
   <script>
-    /* optional: prevent # jump while prototyping */
-    document.querySelectorAll('a.box-link[href="#"]').forEach(a=>{
-      a.addEventListener('click', e => e.preventDefault());
+    // Click ripple feedback (best practice: pointer events + clean reset)
+    document.querySelectorAll(".box").forEach(box => {
+      box.addEventListener("pointerdown", (e) => {
+        const r = box.getBoundingClientRect();
+        box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+        box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+        box.classList.remove("ripple");
+        void box.offsetWidth;
+        box.classList.add("ripple");
+      });
+      box.addEventListener("animationend", () => box.classList.remove("ripple"));
     });
   </script>
 </body>
 </html>
+
+
 
