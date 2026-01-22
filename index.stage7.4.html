@@ -1,129 +1,138 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Communications Execution</title>
 
   <style>
     :root{
-      /* Purple theme */
-      --purple: #6a2ca0;
+      --purple:#6a2ca0;
 
-      --line: var(--purple);
-      --border: 2px solid var(--purple);
+      /* compact layout */
+      --gap:6px;
+      --pad:6px;
 
-      /* Fixed viewport */
-      --frameW: 500px;
-      --frameH: 500px;
-
-      /* Box sizing */
-      --boxW: 85px;
-      --boxH: 115px;
-      --boxPad: 8px;
-
-      /* Spacing */
-      --gapX: 10px;
-
-      /* Typography */
-      --headerFont: 15px;
-      --stepFont: 11px;
-      --textFont: 9.2px;
-
-      /* Middle baseline for connectors */
-      --yMid: 95px;
+      /* computed (fallbacks if JS is blocked) */
+      --box:110px;
+      --mid:55px;
+      --flowW:350px;
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #000;
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
+    /* shrink to content (don’t force 500x500) */
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      max-width:500px;
+      max-height:500px;
+      overflow:hidden;
     }
 
+    /* requirement: header width matches boxes width */
     .header{
-      background: var(--purple);
-      color: #fff;
-      padding: 6px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 18px;
+      width:var(--flowW);
+      background:var(--purple);
+      color:#fff;
+      padding:6px 12px;
+      font-size:15px;   /* keep */
+      font-weight:700;
+      box-sizing:border-box;
+      margin-bottom:14px;
     }
 
-    /* Single-row flow (3 boxes) */
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(3, var(--boxW));
-      column-gap: var(--gapX);
-      align-items: start;
-      padding-top: 10px;
+      position:relative;
+      width:var(--flowW);
+      display:grid;
+      grid-template-columns:repeat(3,var(--box));
+      gap:0 var(--gap);
+      align-items:start;
+      padding-top:6px;
     }
 
-    .box-link{
-      display: block;
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      background: #fff;
-      text-decoration: none;
-      color: inherit;
-      line-height: 1.15;
-      position: relative;
-      z-index: 2;
+    .box{
+      width:var(--box);
+      height:var(--box);            /* perfect square */
+      border:2px solid var(--purple);
+      padding:var(--pad);
+      box-sizing:border-box;
+      background:#fff;
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;              /* ripple stays inside */
+      transition:background-color 120ms ease, transform 80ms ease;
+      outline:none;
+      z-index:1;
+    }
+
+    /* requirement: lighter INSIDE on hover */
+    .box:hover{ background:rgba(106,44,160,.08); }
+    .box:active{
+      transform:scale(.99);
+      background:rgba(106,44,160,.12);
+    }
+
+    /* best-practice keyboard focus */
+    .box:focus-visible{
+      box-shadow:0 0 0 3px rgba(106,44,160,.25);
     }
 
     .step{
-      font-size: var(--stepFont);
-      font-weight: 700;
-      margin: 0 0 5px 0;
-      color: var(--purple);
+      margin:0 0 5px 0;
+      font-size:11px;  /* keep */
+      font-weight:700;
+      color:var(--purple);
+      white-space:nowrap;
     }
 
+    /* requirement: one word per line, no mid-word breaks */
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
-      margin: 0;
+      margin:0;
+      font-size:9.2px; /* keep */
+      line-height:1.15;
+      white-space:nowrap;
     }
 
-    /* Connector line primitive */
-    .h-line{
-      position: absolute;
-      height: 2px;
-      background: var(--line);
-      pointer-events: none;
-      z-index: 1;
+    /* connector lines */
+    .line{
+      position:absolute;
+      height:2px;
+      background:var(--purple);
+      top:var(--mid);
+      pointer-events:none;
+      z-index:0;
     }
+    .line.l12{ left:var(--box); width:var(--gap); }
+    .line.l23{ left:calc(var(--box) * 2 + var(--gap)); width:var(--gap); }
 
-    /* Placement */
-    .b7310{ grid-column: 1; }
-    .b7320{ grid-column: 2; }
-    .b7330{ grid-column: 3; }
-
-    /* Connectors */
-    .l12{
-      left: var(--boxW);
-      top: var(--yMid);
-      width: var(--gapX);
+    /* click ripple */
+    .box::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(106,44,160,.25);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
     }
-    .l23{
-      left: calc((var(--boxW) * 2) + var(--gapX));
-      top: var(--yMid);
-      width: var(--gapX);
+    .box.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{opacity:.9; transform:translate(-50%,-50%) scale(1);}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(18);}
     }
   </style>
 </head>
@@ -132,48 +141,105 @@
   <div class="frame">
     <div class="header">Communications Execution</div>
 
-    <div class="flow">
-  <!-- Boxes (clickable) -->
-  <a class="box-link b7310" href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-7050-.aspx?csf=1&web=1&e=FZ3DbE" target="_blank" rel="noopener noreferrer">
-    <div class="step">7310</div>
-    <div class="text">
-      Task<br/>
-      Package<br/>
-      7310
+    <div class="flow" id="flow">
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-7050-.aspx?csf=1&web=1&e=FZ3DbE"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">7310</div>
+        <div class="text">
+          Execute<br/>
+          Communications<br/>
+          Plan
+        </div>
+      </a>
+
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-7340--Measure-Progress-Along-the-Commitment-Curve.aspx?csf=1&web=1&e=psHHtL"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">7320</div>
+        <div class="text">
+          Measure<br/>
+          Progress<br/>
+          Along the<br/>
+          Commitment<br/>
+          Curve
+        </div>
+      </a>
+
+      <a class="box"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-7330-.aspx"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">7330</div>
+        <div class="text">
+          Monitor<br/>
+          Effectiveness<br/>
+          and Make<br/>
+          Changes
+        </div>
+      </a>
+
+      <div class="line l12" aria-hidden="true"></div>
+      <div class="line l23" aria-hidden="true"></div>
     </div>
-  </a>
-
-  <a class="box-link b7320" href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-7340--Measure-Progress-Along-the-Commitment-Curve.aspx?csf=1&web=1&e=psHHtL" target="_blank" rel="noopener noreferrer">
-    <div class="step">7320</div>
-    <div class="text">
-      Measure Progress<br/>
-      Along the<br/>
-      Commitment Curve
-    </div>
-  </a>
-
-  <a class="box-link b7330" href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-7330-.aspx" target="_blank" rel="noopener noreferrer">
-    <div class="step">7330</div>
-    <div class="text">
-      Task<br/>
-      Package<br/>
-      7330
-    </div>
-  </a>
-
-  <!-- Lines -->
-  <div class="h-line l12"></div>
-  <div class="h-line l23"></div>
-</div>
-
   </div>
 
   <script>
-    /* optional: prevent # jump while prototyping */
-    document.querySelectorAll('a.box-link[href="#"]').forEach(a=>{
-      a.addEventListener('click', e => e.preventDefault());
-    });
+    (() => {
+      const root = document.documentElement;
+      const flow = document.getElementById("flow");
+      const boxes = [...document.querySelectorAll(".box")];
+      const setVar = (k, v) => root.style.setProperty(k, v);
+
+      function fitSquares() {
+        // Measure natural size, then lock to smallest uniform square that fits all content.
+        const prev = boxes.map(b => ({ w: b.style.width, h: b.style.height }));
+        boxes.forEach(b => { b.style.width = "auto"; b.style.height = "auto"; });
+        void flow.offsetWidth;
+
+        let maxW = 0, maxH = 0;
+        for (const b of boxes) {
+          const r = b.getBoundingClientRect();
+          if (r.width > maxW) maxW = r.width;
+          if (r.height > maxH) maxH = r.height;
+        }
+
+        const size = Math.ceil(Math.max(maxW, maxH));
+        const gap = parseFloat(getComputedStyle(root).getPropertyValue("--gap")) || 6;
+
+        setVar("--box", size + "px");
+        setVar("--flowW", ((size * 3) + (gap * 2)) + "px");
+        setVar("--mid", Math.round(size / 2) + "px");
+
+        boxes.forEach((b, i) => { b.style.width = prev[i].w; b.style.height = prev[i].h; });
+      }
+
+      function enableClickFeedback() {
+        for (const box of boxes) {
+          box.addEventListener("pointerdown", (e) => {
+            const r = box.getBoundingClientRect();
+            box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+            box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+            box.classList.remove("ripple");
+            void box.offsetWidth; // restart animation
+            box.classList.add("ripple");
+          });
+          box.addEventListener("animationend", () => box.classList.remove("ripple"));
+        }
+      }
+
+      window.addEventListener("load", () => {
+        fitSquares();
+        enableClickFeedback();
+      });
+
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__fitT);
+        window.__fitT = setTimeout(fitSquares, 80);
+      });
+    })();
   </script>
 </body>
 </html>
+
+
 
