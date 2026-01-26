@@ -9,16 +9,16 @@
     :root{
       --purple:#6a2ca0;
 
-      /* Compact layout */
+      /* compact layout */
       --gap:6px;
       --pad:6px;
 
-      /* FORCE smaller square boxes so all 5 fit */
-      --box:84px;
+      /* ✅ big squares (match 7.3 sizing) */
+      --box:110px;
 
-      /* computed from box size */
-      --mid:42px;
-      --flowW:444px;
+      /* computed */
+      --mid:55px;
+      --flowW:574px; /* 110*5 + 6*4 */
     }
 
     body{
@@ -28,13 +28,13 @@
       color:#000;
     }
 
+    /* ✅ expand screen width to fit all boxes */
     .frame{
       display:inline-block;
       padding:10px;
       box-sizing:border-box;
-      max-width:500px;
-      max-height:500px;
-      overflow:hidden;
+      width:var(--flowW);
+      overflow:visible; /* no cropping */
     }
 
     /* Purple bar only as wide as boxes */
@@ -43,7 +43,7 @@
       background:var(--purple);
       color:#fff;
       padding:6px 12px;
-      font-size:15px; /* keep */
+      font-size:15px;
       font-weight:700;
       box-sizing:border-box;
       margin-bottom:14px;
@@ -61,7 +61,7 @@
 
     .box{
       width:var(--box);
-      height:var(--box);            /* perfect square */
+      height:var(--box);
       border:2px solid var(--purple);
       padding:var(--pad);
       box-sizing:border-box;
@@ -70,15 +70,13 @@
       color:inherit;
       cursor:pointer;
       position:relative;
-      overflow:hidden;              /* ripple stays inside */
+      overflow:hidden;
       transition:background-color 120ms ease, transform 80ms ease;
       outline:none;
       z-index:1;
     }
 
-    /* lighter INSIDE on hover */
     .box:hover{ background:rgba(106,44,160,.08); }
-
     .box:active{
       transform:scale(.99);
       background:rgba(106,44,160,.12);
@@ -90,7 +88,7 @@
 
     .step{
       margin:0 0 5px 0;
-      font-size:11px;  /* keep */
+      font-size:11px;
       font-weight:700;
       color:var(--purple);
       white-space:nowrap;
@@ -98,7 +96,7 @@
 
     .text{
       margin:0;
-      font-size:9.2px; /* keep */
+      font-size:9.2px;
       line-height:1.15;
       white-space:nowrap;
     }
@@ -216,7 +214,6 @@
   </div>
 
   <script>
-    // Click ripple feedback (best practice: pointer events + clean reset)
     document.querySelectorAll(".box").forEach(box => {
       box.addEventListener("pointerdown", (e) => {
         const r = box.getBoundingClientRect();
@@ -231,6 +228,7 @@
   </script>
 </body>
 </html>
+
 
 
 
