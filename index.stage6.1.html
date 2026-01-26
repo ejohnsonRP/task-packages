@@ -1,304 +1,368 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Plan Program</title>
 
   <style>
     :root{
-      /* Dark blue theme */
-      --blue: #0b2a66;
+      --navy:#0b2a66;
 
-      --line: var(--blue);
-      --border: 2px solid var(--blue);
+      /* “original template” typography */
+      --headerFont:15px;
+      --stepFont:11px;
+      --textFont:9.2px;
 
-      /* Fixed viewport */
-      --frameW: 500px;
-      --frameH: 500px;
+      /* ✅ MATCH 6.2 spacing + sizing */
+      --pad:6px;
+      --gapX:28px;
+      --gapY:12px;
 
-      /* Box sizing */
-      --boxW: 85px;
-      --boxH: 115px;
-      --boxPad: 8px;
+      --tick:10px;
 
-      /* Spacing */
-      --gapX: 8px;
+      /* ✅ extra canvas to the RIGHT so the bracket is visible */
+      --edgeRight:28px;
 
-      /* Typography */
-      --headerFont: 17px;
-      --stepFont: 11px;
-      --textFont: 9.5px;
-
-      /* Grid row gap (needed for bracket math) */
-      --rowGap: 18px;
-
-      /* Y centers for each row inside .flow */
-      --y1: calc(8px + (var(--boxH) / 2));
-      --y2: calc(8px + var(--boxH) + var(--rowGap) + (var(--boxH) / 2));
-      --y3: calc(8px + (var(--boxH) * 2) + (var(--rowGap) * 2) + (var(--boxH) / 2));
-
-      /* X anchors for columns */
-      --col1Start: 0px;
-      --col2Start: calc(var(--boxW) + var(--gapX));
-      --col3Start: calc((var(--boxW) * 2) + (var(--gapX) * 2));
-      --col4Start: calc((var(--boxW) * 3) + (var(--gapX) * 3));
-      --col5Start: calc((var(--boxW) * 4) + (var(--gapX) * 4));
-
-      --col1Right: calc(var(--col1Start) + var(--boxW));
-      --col2Right: calc(var(--col2Start) + var(--boxW));
-      --col3Right: calc(var(--col3Start) + var(--boxW));
-      --col4Right: calc(var(--col4Start) + var(--boxW));
-      --col5Right: calc(var(--col5Start) + var(--boxW));
-
-      /* Bracket geometry */
-      --bracketOffset: 6px;  /* spine distance outside boxes */
-      --armLen: 10px;        /* bracket arm length */
+      /* computed (fallback) */
+      --box:90px;     /* JS computes smallest uniform square */
+      --flowW:560px;  /* JS sets exact width */
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #000;
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      background:#fff;
+      overflow:visible; /* don't crop the diagram */
     }
 
     .header{
-      background: var(--blue);
-      color: #fff;
-      padding: 8px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 18px;
+      width:var(--flowW);
+      background:var(--navy);
+      color:#fff;
+      padding:6px 12px;
+      font-size:var(--headerFont);
+      font-weight:700;
+      box-sizing:border-box;
+      margin-bottom:14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(5, var(--boxW));
-      grid-template-rows: repeat(3, var(--boxH));
-      column-gap: var(--gapX);
-      row-gap: var(--rowGap);
-      align-items: start;
-      padding-top: 8px;
+      position:relative;
+      width:var(--flowW);
+      display:grid;
+      grid-template-columns:repeat(5,var(--box));
+      grid-template-rows:repeat(3,var(--box));
+      column-gap:var(--gapX);
+      row-gap:var(--gapY);
+      align-items:start;
+      padding-top:6px;
+
+      /* ✅ adds visible space on the right */
+      padding-right:var(--edgeRight);
+
+      box-sizing:border-box;
     }
 
-    .box-link{
-      display: block;
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      background: #fff;
-      text-decoration: none;
-      color: inherit;
-      line-height: 1.15;
-      position: relative;
-      z-index: 2;
+    /* placement */
+    .b6010{ grid-column:1; grid-row:2; }
+    .b6020{ grid-column:2; grid-row:1; }
+    .b6030{ grid-column:2; grid-row:2; }
+    .b6040{ grid-column:2; grid-row:3; }
+    .b6050{ grid-column:3; grid-row:2; }
+    .b6060{ grid-column:4; grid-row:2; }
+    .b6070{ grid-column:5; grid-row:1; }
+    .b6080{ grid-column:5; grid-row:3; }
+
+    a.box{
+      display:block;
+      width:var(--box);
+      height:var(--box);
+      border:2px solid var(--navy);
+      padding:var(--pad);
+      box-sizing:border-box;
+      background:#fff;
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+      outline:none;
+      z-index:2;
+      line-height:1.15;
+      transition:background-color 120ms ease, transform 80ms ease;
+    }
+
+    a.box:hover{ background:rgba(11,42,102,.08); }
+    a.box:active{ transform:scale(.99); background:rgba(11,42,102,.12); }
+
+    a.box:focus-visible{
+      box-shadow:0 0 0 3px rgba(11,42,102,.25);
     }
 
     .step{
-      font-size: var(--stepFont);
-      font-weight: 700;
-      margin: 0 0 5px 0;
-      color: var(--blue);
+      margin:0 0 5px 0;
+      font-size:var(--stepFont);
+      font-weight:700;
+      color:var(--navy);
+      white-space:nowrap;
     }
-
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
-      margin: 0;
+      margin:0;
+      font-size:var(--textFont);
+      line-height:1.15;
+      white-space:nowrap;
     }
 
-    /* Placement */
-    .b6010{ grid-column: 1; grid-row: 2; }
-
-    .b6020{ grid-column: 2; grid-row: 1; }
-    .b6030{ grid-column: 2; grid-row: 2; }
-    .b6040{ grid-column: 2; grid-row: 3; }
-
-    .b6050{ grid-column: 3; grid-row: 2; }
-    .b6060{ grid-column: 4; grid-row: 2; }
-
-    .b6070{ grid-column: 5; grid-row: 1; }
-    .b6080{ grid-column: 5; grid-row: 3; }
-
-    /* connector primitives */
-    .h-line, .v-line{
-      position: absolute;
-      background: var(--line);
-      pointer-events: none;
-      z-index: 1;
+    /* click ripple */
+    a.box::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px; height:10px;
+      border-radius:999px;
+      background:rgba(11,42,102,.22);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
     }
-    .h-line{ height: 2px; }
-    .v-line{ width: 2px; }
-
-    /* Main row connectors (row 2) */
-    .h12{
-      left: var(--col1Right);
-      top: var(--y2);
-      width: var(--gapX);
-    }
-    .h23{
-      left: var(--col2Right);
-      top: var(--y2);
-      width: var(--gapX);
-    }
-    .h34{
-      left: var(--col3Right);
-      top: var(--y2);
-      width: var(--gapX);
+    a.box.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{opacity:.9; transform:translate(-50%,-50%) scale(1);}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(18);}
     }
 
-    /* Center bracket (left side of col2 stack) */
-    .c-spine{
-      left: calc(var(--col2Start) - var(--bracketOffset));
-      top: var(--y1);
-      height: calc(var(--y3) - var(--y1));
+    /* SVG overlay */
+    .wires{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index:1;
     }
-    .c-arm-top{
-      left: calc(var(--col2Start) - var(--bracketOffset));
-      top: var(--y1);
-      width: var(--armLen);
-    }
-    .c-arm-bot{
-      left: calc(var(--col2Start) - var(--bracketOffset));
-      top: var(--y3);
-      width: var(--armLen);
-    }
-    .c-join{
-      left: calc(var(--col1Right) + var(--gapX));
-      top: var(--y2);
-      width: calc(var(--col2Start) - (var(--col1Right) + var(--gapX)) - var(--bracketOffset));
-    }
-
-    /* Right bracket (left side of col5 stack) */
-    .r-join{
-      left: var(--col4Right);
-      top: var(--y2);
-      width: calc(var(--col5Start) - var(--col4Right) - var(--bracketOffset));
-    }
-    .r-spine{
-      left: calc(var(--col5Start) - var(--bracketOffset));
-      top: var(--y1);
-      height: calc(var(--y3) - var(--y1));
-    }
-    .r-arm-top{
-      left: calc(var(--col5Start) - var(--bracketOffset));
-      top: var(--y1);
-      width: var(--armLen);
-    }
-    .r-arm-bot{
-      left: calc(var(--col5Start) - var(--bracketOffset));
-      top: var(--y3);
-      width: var(--armLen);
-    }
-
-    /* ✅ NEW: Right-side bracket for ROW 2 (on the right side of 6060) */
-    .m2-spine{
-      /* spine sits just to the right of col4 box */
-      left: calc(var(--col4Right) + var(--bracketOffset));
-      top: calc(var(--y2) - 18px);
-      height: 36px;
-    }
-    .m2-arm{
-      /* arm hooks LEFT into the box at row2 center */
-      left: calc(var(--col4Right) + var(--bracketOffset) - var(--armLen));
-      top: var(--y2);
-      width: var(--armLen);
-    }
-
   </style>
 </head>
 
 <body>
   <div class="frame">
-    <div class="header">Plan Program</div>
+    <div class="header" id="hdr">Plan Program</div>
 
-    <div class="flow">
-      <!-- Boxes -->
-      <a class="box-link b6010" href="#" target="_blank" rel="noopener noreferrer">
+    <div class="flow" id="flow">
+      <svg class="wires" id="wires" aria-hidden="true"></svg>
+
+      <a class="box b6010" id="b6010"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-6010--Und.aspx?csf=1&web=1&e=FUcZUQ"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6010</div>
-        <div class="text">Understand<br/>Program<br/>Expectations</div>
+        <div class="text">Understand<br/>Program<br/>Scope</div>
       </a>
 
-      <a class="box-link b6020" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="box b6020" id="b6020"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6020--Design.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6020</div>
-        <div class="text">Design<br/>Management<br/>Processes</div>
+        <div class="text">Design<br/>Mgmt<br/>Processes</div>
       </a>
 
-      <a class="box-link b6030" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="box b6030" id="b6030"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6030--Structure-Governance.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6030</div>
         <div class="text">Structure<br/>Governance</div>
       </a>
 
-      <a class="box-link b6040" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="box b6040" id="b6040"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6040--Develop-Work-Break-Down-Structure.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6040</div>
-        <div class="text">Develop<br/>Work<br/>breakdown<br/>Structure</div>
+        <div class="text">Develop<br/>WBS</div>
       </a>
 
-      <a class="box-link b6050" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="box b6050" id="b6050"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6050--Devel.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6050</div>
-        <div class="text">Develop<br/>Project Plans</div>
+        <div class="text">Develop<br/>Workplans</div>
       </a>
 
-      <a class="box-link b6060" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="box b6060" id="b6060"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6060--Develop-Master-Plan.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6060</div>
-        <div class="text">Develop<br/>Program<br/>Master Plan</div>
+        <div class="text">Master<br/>Plan</div>
       </a>
 
-      <a class="box-link b6070" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="box b6070" id="b6070"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6070-.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6070</div>
-        <div class="text">Identify<br/>dependencies</div>
+        <div class="text">Identify<br/>Dependencies</div>
       </a>
 
-      <a class="box-link b6080" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="box b6080" id="b6080"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6080--I.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6080</div>
-        <div class="text">Identify<br/>Resource<br/>Needs</div>
+        <div class="text">Identify<br/>Resources</div>
       </a>
-
-      <!-- Main connectors -->
-      <div class="h-line h12"></div>
-      <div class="h-line h23"></div>
-      <div class="h-line h34"></div>
-
-      <!-- Center bracket -->
-      <div class="v-line c-spine"></div>
-      <div class="h-line c-arm-top"></div>
-      <div class="h-line c-arm-bot"></div>
-      <div class="h-line c-join"></div>
-
-      <!-- Right bracket (col5 stack) -->
-      <div class="h-line r-join"></div>
-      <div class="v-line r-spine"></div>
-      <div class="h-line r-arm-top"></div>
-      <div class="h-line r-arm-bot"></div>
-
-      <!-- ✅ NEW right-side bracket for row 2 (6060) -->
-      <div class="v-line m2-spine"></div>
-      <div class="h-line m2-arm"></div>
-
     </div>
   </div>
 
   <script>
-    /* optional: prevent # jump while prototyping */
-    document.querySelectorAll('a.box-link[href="#"]').forEach(a=>{
-      a.addEventListener('click', e => e.preventDefault());
-    });
+    (() => {
+      const root = document.documentElement;
+      const flow = document.getElementById("flow");
+      const svg = document.getElementById("wires");
+      const header = document.getElementById("hdr");
+
+      const boxes = [...document.querySelectorAll("a.box")];
+
+      const b6010 = document.getElementById("b6010");
+      const b6020 = document.getElementById("b6020");
+      const b6030 = document.getElementById("b6030");
+      const b6040 = document.getElementById("b6040");
+      const b6050 = document.getElementById("b6050");
+      const b6060 = document.getElementById("b6060");
+      const b6070 = document.getElementById("b6070");
+      const b6080 = document.getElementById("b6080");
+
+      const setVar = (k, v) => root.style.setProperty(k, v);
+
+      function relRect(el) {
+        const fr = flow.getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+        return {
+          left: r.left - fr.left,
+          top: r.top - fr.top,
+          right: r.right - fr.left,
+          bottom: r.bottom - fr.top,
+          width: r.width,
+          height: r.height
+        };
+      }
+
+      function fitSquares() {
+        const prev = boxes.map(b => ({ w: b.style.width, h: b.style.height }));
+        boxes.forEach(b => { b.style.width = "auto"; b.style.height = "auto"; });
+        void flow.offsetWidth;
+
+        let maxW = 0, maxH = 0;
+        for (const b of boxes) {
+          const r = b.getBoundingClientRect();
+          maxW = Math.max(maxW, r.width);
+          maxH = Math.max(maxH, r.height);
+        }
+
+        const size = Math.ceil(Math.max(maxW, maxH));
+        const gapX = parseFloat(getComputedStyle(root).getPropertyValue("--gapX")) || 28;
+        const edgeRight = parseFloat(getComputedStyle(root).getPropertyValue("--edgeRight")) || 28;
+
+        setVar("--box", size + "px");
+        // ✅ include extra space for the right bracket
+        setVar("--flowW", ((size * 5) + (gapX * 4) + edgeRight) + "px");
+
+        boxes.forEach((b, i) => { b.style.width = prev[i].w; b.style.height = prev[i].h; });
+      }
+
+      function drawWires() {
+        const fr = flow.getBoundingClientRect();
+        svg.setAttribute("viewBox", `0 0 ${fr.width} ${fr.height}`);
+        svg.setAttribute("width", fr.width);
+        svg.setAttribute("height", fr.height);
+        header.style.width = fr.width + "px";
+
+        const r6010 = relRect(b6010);
+        const r6020 = relRect(b6020);
+        const r6030 = relRect(b6030);
+        const r6040 = relRect(b6040);
+        const r6050 = relRect(b6050);
+        const r6060 = relRect(b6060);
+        const r6070 = relRect(b6070);
+        const r6080 = relRect(b6080);
+
+        const stroke = getComputedStyle(root).getPropertyValue("--navy").trim() || "#0b2a66";
+        const tick = parseFloat(getComputedStyle(root).getPropertyValue("--tick")) || 10;
+
+        const clear = 10;
+        const capPad = 6;
+        const linePad = 6;
+
+        const yRow2 = r6030.top + (r6030.height / 2);
+        const y6060 = r6060.top + (r6060.height / 2);
+
+        const yCol2Top = r6020.top + capPad;
+        const yCol2Bot = r6040.bottom - capPad;
+
+        const xBracket1L = r6020.left - clear;
+        const xBracket1R = Math.min(r6020.right + clear, r6050.left - clear);
+
+        const yCol5Top = r6070.top + capPad;
+        const yCol5Bot = r6080.bottom - capPad;
+
+        const xBracket2L = Math.max(r6070.left - clear, r6060.right + clear);
+
+        // ✅ right bracket now visible because flowW includes edgeRight
+        const xRightMini = r6070.right + clear;
+
+        svg.innerHTML = `
+          <g fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="square">
+            <path d="M ${xBracket1L + tick} ${yCol2Top} H ${xBracket1L} V ${yCol2Bot} H ${xBracket1L + tick}" />
+            <path d="M ${xBracket1R - tick} ${yCol2Top} H ${xBracket1R} V ${yCol2Bot} H ${xBracket1R - tick}" />
+
+            <path d="M ${xBracket2L + tick} ${yCol5Top} H ${xBracket2L} V ${yCol5Bot} H ${xBracket2L + tick}" />
+            <path d="M ${xRightMini - tick} ${yCol5Top} H ${xRightMini} V ${yCol5Bot} H ${xRightMini - tick}" />
+
+            <path d="M ${r6010.right} ${yRow2} H ${xBracket1L + linePad}" />
+            <path d="M ${xBracket1R} ${yRow2} H ${r6050.left}" />
+            <path d="M ${r6050.right} ${yRow2} H ${r6060.left}" />
+            <path d="M ${r6060.right} ${y6060} H ${xBracket2L}" />
+          </g>
+        `;
+      }
+
+      function enableRipple() {
+        boxes.forEach(box => {
+          box.addEventListener("pointerdown", (e) => {
+            const r = box.getBoundingClientRect();
+            box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+            box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+            box.classList.remove("ripple");
+            void box.offsetWidth;
+            box.classList.add("ripple");
+          });
+          box.addEventListener("animationend", () => box.classList.remove("ripple"));
+        });
+      }
+
+      function layout() {
+        fitSquares();
+        requestAnimationFrame(drawWires);
+      }
+
+      window.addEventListener("load", () => {
+        enableRipple();
+        layout();
+      });
+
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__layoutT);
+        window.__layoutT = setTimeout(layout, 80);
+      });
+    })();
   </script>
 </body>
 </html>
+
