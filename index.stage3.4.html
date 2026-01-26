@@ -1,132 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Board Approval</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Board Approvals</title>
 
   <style>
     :root{
-      /* Green used everywhere (matches your green stages) */
-      --green: #0aa84f;
+      /* ✅ green for bar + boxes + lines */
+      --green:#2e7d32;
 
-      --border: 3px solid var(--green);
-      --line: var(--green);
+      /* ✅ EXACT 4.3 spacing */
+      --gap:6px;
+      --pad:6px;
 
-      /* Fixed viewport */
-      --frameW: 500px;
-      --frameH: 500px;
+      /* computed (fallbacks if JS blocked) */
+      --box:110px;
+      --mid:55px;
+      --flowW:574px; /* 110*5 + 6*4 */
 
-      /* Box sizing */
-      --boxW: 90px;
-      --boxH: 110px;
-      --boxPad: 10px;
-
-      /* Spacing */
-      --gapX: 10px;
-
-      /* Typography (STANDARD across all pages) */
-      --headerFont: 17px;
-      --stepFont: 11px;
-      --textFont: 9.5px;
-
-      /* Layout helpers */
-      --flowTopPad: 10px;
-      --rowCenterY: calc(var(--flowTopPad) + (var(--boxH) / 2));
+      /* ✅ EXACT 4.3 typography */
+      --headerFont:15px;
+      --stepFont:11px;
+      --textFont:9.2px;
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #000;
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
-      background: #fff;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      background:#fff;
+      overflow:visible;
     }
 
+    /* ✅ bar height + position matches 4.3 */
     .header{
-      background: var(--green);
-      color: #fff;
-      padding: 8px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 18px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      width:var(--flowW);
+      background:var(--green);
+      color:#fff;
+      padding:6px 12px;
+      font-size:var(--headerFont);
+      font-weight:700;
+      box-sizing:border-box;
+      margin-bottom:14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(5, var(--boxW));
-      column-gap: var(--gapX);
-      align-items: start;
-      padding-top: var(--flowTopPad);
+      position:relative;
+      width:var(--flowW);
+      display:grid;
+      grid-template-columns:repeat(5,var(--box));
+      gap:0 var(--gap);
+      align-items:start;
+      padding-top:6px;
     }
 
-    .box-link{
-      display: block;
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      background: #fff;
-      text-decoration: none;
-      color: inherit;
-      line-height: 1.15;
-      position: relative;
-      z-index: 2;
+    a.box{
+      width:var(--box);
+      height:var(--box);              /* perfect square */
+      border:2px solid var(--green);
+      padding:var(--pad);
+      box-sizing:border-box;
+      background:#fff;
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;                /* ripple stays inside */
+      transition:background-color 120ms ease, transform 80ms ease;
+      outline:none;
+      z-index:1;
+      line-height:1.15;
+      display:block;
+    }
+
+    a.box:hover{ background:rgba(46,125,50,.12); }
+    a.box:active{
+      transform:scale(.99);
+      background:rgba(46,125,50,.18);
+    }
+
+    a.box:focus-visible{
+      box-shadow:0 0 0 3px rgba(46,125,50,.35);
     }
 
     .step{
-      font-size: var(--stepFont);
-      font-weight: 400;
-      margin: 0 0 6px 0;
+      margin:0 0 5px 0;
+      font-size:var(--stepFont);
+      font-weight:700;
+      color:var(--green);
+      white-space:nowrap;
     }
 
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
-      margin: 0;
-      overflow-wrap: anywhere;
+      margin:0;
+      font-size:var(--textFont);
+      font-weight:400;
+      line-height:1.15;
+      white-space:nowrap;
     }
 
-    /* Straight connector lines */
-    .h-line{
-      position: absolute;
-      height: 2px;
-      background: var(--line);
-      top: var(--rowCenterY);
-      pointer-events: none;
-      z-index: 1;
+    /* connector lines (same style as 4.3, extended to 5 boxes) */
+    .line{
+      position:absolute;
+      height:2px;
+      background:var(--green);
+      top:var(--mid);
+      pointer-events:none;
+      z-index:0;
     }
+    .line.l12{ left:var(--box); width:var(--gap); }
+    .line.l23{ left:calc(var(--box) * 2 + var(--gap)); width:var(--gap); }
+    .line.l34{ left:calc(var(--box) * 3 + var(--gap) * 2); width:var(--gap); }
+    .line.l45{ left:calc(var(--box) * 4 + var(--gap) * 3); width:var(--gap); }
 
-    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
-    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
-    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
-    .h45{ left: calc((var(--boxW) * 4) + (var(--gapX) * 3)); width: var(--gapX); }
+    /* click ripple */
+    a.box::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(46,125,50,.35);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
+    }
+    a.box.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{opacity:.9; transform:translate(-50%,-50%) scale(1);}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(18);}
+    }
   </style>
 </head>
 
 <body>
   <div class="frame">
-    <div class="header">Board Approval</div>
+    <div class="header">Board Approvals</div>
 
-    <div class="flow">
-      <a class="box-link"
+    <div class="flow" id="flow">
+      <a class="box"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3310--Prepare-Board-Materials-Package.aspx?csf=1&web=1&e=4Dugms"
          target="_blank" rel="noopener noreferrer">
         <div class="step">3310</div>
@@ -138,7 +163,7 @@
         </div>
       </a>
 
-      <a class="box-link"
+      <a class="box"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3320--Conduct-Management-Readiness-and-Pre-reads.aspx?csf=1&web=1&e=xxer5F"
          target="_blank" rel="noopener noreferrer">
         <div class="step">3320</div>
@@ -146,12 +171,11 @@
           Conduct<br/>
           Management<br/>
           Readiness<br/>
-          and Pre-<br/>
-          reads
+          and Pre-reads
         </div>
       </a>
 
-      <a class="box-link"
+      <a class="box"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3330--Secure-Required-Board-Approvals.aspx?csf=1&web=1&e=TQE8bF"
          target="_blank" rel="noopener noreferrer">
         <div class="step">3330</div>
@@ -163,7 +187,7 @@
         </div>
       </a>
 
-      <a class="box-link"
+      <a class="box"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3340--Document-Board-Resolutions-and-Governance.aspx?csf=1&web=1&e=8E9pyU"
          target="_blank" rel="noopener noreferrer">
         <div class="step">3340</div>
@@ -171,30 +195,84 @@
           Document<br/>
           Board<br/>
           Resolutions<br/>
-          and<br/>
-          Governance
+          and Governance
         </div>
       </a>
 
-      <a class="box-link"
+      <a class="box"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3350--Communicate-Approval-and-Launch-Closing-Process.aspx?csf=1&web=1&e=N8A95l"
          target="_blank" rel="noopener noreferrer">
         <div class="step">3350</div>
         <div class="text">
           Communicate<br/>
           Approval and<br/>
-          Launch<br/>
-          Closing<br/>
+          Launch Closing<br/>
           Process
         </div>
       </a>
 
-      <!-- connector lines -->
-      <div class="h-line h12"></div>
-      <div class="h-line h23"></div>
-      <div class="h-line h34"></div>
-      <div class="h-line h45"></div>
+      <div class="line l12" aria-hidden="true"></div>
+      <div class="line l23" aria-hidden="true"></div>
+      <div class="line l34" aria-hidden="true"></div>
+      <div class="line l45" aria-hidden="true"></div>
     </div>
   </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const flow = document.getElementById("flow");
+      const boxes = [...document.querySelectorAll(".box")];
+      const setVar = (k, v) => root.style.setProperty(k, v);
+
+      function fitSquares() {
+        // Smallest uniform square that fits the largest box content (same as 4.3).
+        const prev = boxes.map(b => ({ w: b.style.width, h: b.style.height }));
+        boxes.forEach(b => { b.style.width = "auto"; b.style.height = "auto"; });
+        void flow.offsetWidth;
+
+        let maxW = 0, maxH = 0;
+        for (const b of boxes) {
+          const r = b.getBoundingClientRect();
+          if (r.width > maxW) maxW = r.width;
+          if (r.height > maxH) maxH = r.height;
+        }
+
+        const size = Math.ceil(Math.max(maxW, maxH));
+        const gap = parseFloat(getComputedStyle(root).getPropertyValue("--gap")) || 6;
+
+        setVar("--box", size + "px");
+        setVar("--flowW", ((size * 5) + (gap * 4)) + "px");
+        setVar("--mid", Math.round(size / 2) + "px");
+
+        boxes.forEach((b, i) => { b.style.width = prev[i].w; b.style.height = prev[i].h; });
+      }
+
+      function enableRipple() {
+        boxes.forEach(box => {
+          box.addEventListener("pointerdown", (e) => {
+            const r = box.getBoundingClientRect();
+            box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+            box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+            box.classList.remove("ripple");
+            void box.offsetWidth;
+            box.classList.add("ripple");
+          });
+          box.addEventListener("animationend", () => box.classList.remove("ripple"));
+        });
+      }
+
+      window.addEventListener("load", () => {
+        fitSquares();
+        enableRipple();
+      });
+
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__fitT);
+        window.__fitT = setTimeout(fitSquares, 80);
+      });
+    })();
+  </script>
 </body>
 </html>
+
