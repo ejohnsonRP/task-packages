@@ -1,316 +1,355 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Preliminary Evaluation / Target Assessment</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Preliminary Evaluation/Target Assessment</title>
 
   <style>
     :root{
-      --blue: #2f64f5;
-      --line: var(--blue);
-      --border: 2px solid var(--blue);
+      /* bright blue everywhere */
+      --brand:#2f64f5;
 
-      /* Fixed viewport */
-      --frameW: 500px;
-      --frameH: 500px;
+      /* typography */
+      --headerFont:15px;
+      --stepFont:11px;
+      --textFont:9.2px;
 
-      /* Box sizing (font sizes unchanged) */
-      --boxW: 85px;     /* tuned so ALL boxes fit including 1360 */
-      --boxH: 115px;
-      --boxPad: 8px;
+      /* spacing + sizing */
+      --pad:6px;
+      --gapX:28px;
+      --gapY:12px;
 
-      /* Spacing */
-      --gapX: 8px;      /* tight so 5 columns fit */
-      --gapY: 12px;     /* between 1330 and 1340 */
+      --tick:10px;
+      --edgeRight:28px;
 
-      /* Typography (unchanged) */
-      --headerFont: 17px;
-      --stepFont: 11px;
-      --textFont: 9.5px;
+      /* computed (fallback) */
+      --box:90px;
+      --flowW:560px;
 
-      /* Flow padding */
-      --flowTopPad: 8px;
-
-      /* Y positions for stacked column */
-      --stackTopY: var(--flowTopPad);
-      --stackBottomY: calc(var(--flowTopPad) + var(--boxH) + var(--gapY));
-
-      --mid1330Y: calc(var(--stackTopY) + (var(--boxH) / 2));
-      --mid1340Y: calc(var(--stackBottomY) + (var(--boxH) / 2));
-      --midBetween: calc((var(--mid1330Y) + var(--mid1340Y)) / 2);
-
-      /* Side boxes centered between stacked boxes */
-      --sideOffset: calc(var(--midBetween) - (var(--boxH) / 2));
-
-      /* X positions for 5 columns:
-         col1: 1310
-         col2: 1320
-         col3: stacked 1330/1340
-         col4: 1350
-         col5: 1360
-      */
-      --c1Left: 0px;
-      --c2Left: calc(var(--boxW) + var(--gapX));
-      --c3Left: calc((var(--boxW) * 2) + (var(--gapX) * 2));
-      --c4Left: calc((var(--boxW) * 3) + (var(--gapX) * 3));
-      --c5Left: calc((var(--boxW) * 4) + (var(--gapX) * 4));
-
-      --c1Right: calc(var(--c1Left) + var(--boxW));
-      --c2Right: calc(var(--c2Left) + var(--boxW));
-      --c3Right: calc(var(--c3Left) + var(--boxW));
-      --c4Right: calc(var(--c4Left) + var(--boxW));
-
-      /* Junction for branching from 1320 to 1330/1340 */
-      --junctionX: calc(var(--c3Left) - (var(--gapX) / 2));
-
-      /* Merge point between stacked boxes and 1350 (placed midway in the gap)
-         This creates the “shared connector” look. */
-      --mergeX: calc(var(--c3Right) + (var(--gapX) / 2));
+      /* NEW: opaque hover/active fills (no transparency, so no lines showing through) */
+      --hoverFill:#eaf0ff;
+      --activeFill:#dfe8ff;
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #000;
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
-      background: #fff;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      background:#fff;
+      overflow:visible;
     }
 
     .header{
-      background: var(--blue);
-      color: #fff;
-      padding: 8px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 16px;
-      box-sizing: border-box;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      width:var(--flowW);
+      background:var(--brand);
+      color:#fff;
+      padding:6px 12px;
+      font-size:var(--headerFont);
+      font-weight:700;
+      box-sizing:border-box;
+      margin-bottom:14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(5, var(--boxW));
-      column-gap: var(--gapX);
-      align-items: start;
-      padding-top: var(--flowTopPad);
+      position:relative;
+      width:var(--flowW);
+      display:grid;
+      grid-template-columns:repeat(5,var(--box));
+      grid-template-rows:repeat(3,var(--box));
+      column-gap:var(--gapX);
+      row-gap:var(--gapY);
+      align-items:start;
+      padding-top:6px;
+
+      padding-right:var(--edgeRight);
+      box-sizing:border-box;
     }
 
-    .box-link{
-      display: block;
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      background: #fff;
-      text-decoration: none;
-      color: inherit;
-      line-height: 1.15;
-      position: relative;
-      z-index: 2; /* above lines */
+    /* placement for 1.4 */
+    .b1310{ grid-column:1; grid-row:2; }
+    .b1320{ grid-column:2; grid-row:2; }
+    .b1330{ grid-column:3; grid-row:1; }
+    .b1340{ grid-column:3; grid-row:3; }
+    .b1350{ grid-column:4; grid-row:2; }
+    .b1360{ grid-column:5; grid-row:2; }
+
+    a.box{
+      display:block;
+      width:var(--box);
+      height:var(--box);
+      border:2px solid var(--brand);
+      padding:var(--pad);
+      box-sizing:border-box;
+      background:#fff;            /* stays opaque */
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+      outline:none;
+      z-index:2;
+      line-height:1.15;
+      transition:background-color 120ms ease, transform 80ms ease;
+    }
+
+    /* FIX: opaque hover/active (no rgba transparency) */
+    a.box:hover{ background:var(--hoverFill); }
+    a.box:active{ transform:scale(.99); background:var(--activeFill); }
+
+    a.box:focus-visible{
+      box-shadow:0 0 0 3px rgba(47,100,245,.25);
     }
 
     .step{
-      font-size: var(--stepFont);
-      font-weight: 700;
-      margin: 0 0 5px 0;
+      margin:0 0 5px 0;
+      font-size:var(--stepFont);
+      font-weight:700;
+      color:var(--brand);
+      white-space:nowrap;
     }
-
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
-      margin: 0;
+      margin:0;
+      font-size:var(--textFont);
+      line-height:1.15;
+      white-space:nowrap;
     }
 
-    /* Column placement */
-    .c1{ grid-column: 1; }
-    .c2{ grid-column: 2; }
-    .c3{ grid-column: 3; }
-    .c4{ grid-column: 4; }
-    .c5{ grid-column: 5; }
-
-    /* Move side boxes (1310/1320/1350/1360) down to center between 1330/1340 */
-    .mid-row{ padding-top: var(--sideOffset); }
-
-    /* Stacked middle column */
-    .stack{
-      display: grid;
-      row-gap: var(--gapY);
+    /* click ripple */
+    a.box::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px; height:10px;
+      border-radius:999px;
+      background:rgba(47,100,245,.28);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
+    }
+    a.box.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{opacity:.9; transform:translate(-50%,-50%) scale(1);}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(18);}
     }
 
-    /* ===== Lines ===== */
-    .line{
-      position: absolute;
-      background: var(--line);
-      pointer-events: none; /* never steal clicks */
-      z-index: 1;
-    }
-    .h{ height: 2px; }
-    .v{ width: 2px; }
-
-    /* 1310 -> 1320 */
-    .l12{
-      left: var(--c1Right);
-      top: var(--midBetween);
-      width: var(--gapX);
-    }
-
-    /* 1320 -> junction */
-    .l2J{
-      left: var(--c2Right);
-      top: var(--midBetween);
-      width: calc(var(--junctionX) - var(--c2Right));
-    }
-
-    /* Vertical branch at junction between 1330 and 1340 */
-    .branchV{
-      left: var(--junctionX);
-      top: var(--mid1330Y);
-      height: calc(var(--mid1340Y) - var(--mid1330Y));
-    }
-
-    /* Junction -> 1330 */
-    .to1330{
-      left: var(--junctionX);
-      top: var(--mid1330Y);
-      width: calc(var(--c3Left) - var(--junctionX));
-    }
-
-    /* Junction -> 1340 */
-    .to1340{
-      left: var(--junctionX);
-      top: var(--mid1340Y);
-      width: calc(var(--c3Left) - var(--junctionX));
-    }
-
-    /* === NEW: Connect 1330 & 1340 into a shared merge point === */
-    .from1330toMerge{
-      left: var(--c3Right);
-      top: var(--mid1330Y);
-      width: calc(var(--mergeX) - var(--c3Right));
-    }
-
-    .from1340toMerge{
-      left: var(--c3Right);
-      top: var(--mid1340Y);
-      width: calc(var(--mergeX) - var(--c3Right));
-    }
-
-    .mergeV{
-      left: var(--mergeX);
-      top: var(--mid1330Y);
-      height: calc(var(--mid1340Y) - var(--mid1330Y));
-    }
-
-    /* Merge point -> 1350 (centered between stacked boxes) */
-    .mergeTo1350{
-      left: var(--mergeX);
-      top: var(--midBetween);
-      width: calc(var(--c4Left) - var(--mergeX));
-    }
-
-    /* 1350 -> 1360 */
-    .l45{
-      left: var(--c4Right);
-      top: var(--midBetween);
-      width: calc(var(--c5Left) - var(--c4Right));
+    /* SVG overlay */
+    .wires{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index:1;
     }
   </style>
 </head>
 
 <body>
   <div class="frame">
-    <div class="header">Preliminary Evaluation / Target Assessment</div>
+    <div class="header" id="hdr">Preliminary Evaluation/Target Assessment</div>
 
-    <div class="flow">
+    <div class="flow" id="flow">
+      <svg class="wires" id="wires" aria-hidden="true"></svg>
+
       <!-- 1310 -->
-      <div class="c1 mid-row">
-        <a class="box-link"
-           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1310-.aspx?csf=1&web=1&e=0VJUHI"
-           target="_blank" rel="noopener noreferrer">
-          <div class="step">1310</div>
-          <div class="text">Conduct<br/>Management<br/>Meetings</div>
-        </a>
-      </div>
+      <a class="box b1310" id="b1310"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1310-.aspx?csf=1&web=1&e=0VJUHI"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1310</div>
+        <div class="text">Conduct<br/>Management<br/>Meetings</div>
+      </a>
 
       <!-- 1320 -->
-      <div class="c2 mid-row">
-        <a class="box-link"
-           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1320--Provide-Initial-Data-Room-Access.aspx?csf=1&web=1&e=Fjghll"
-           target="_blank" rel="noopener noreferrer">
-          <div class="step">1320</div>
-          <div class="text">Provide<br/>Initial Data<br/>Room Access</div>
-        </a>
-      </div>
+      <a class="box b1320" id="b1320"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1320--Provide-Initial-Data-Room-Access.aspx?csf=1&web=1&e=Fjghll"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1320</div>
+        <div class="text">Provide<br/>Initial Data<br/>Room Access</div>
+      </a>
 
-      <!-- Stacked 1330 / 1340 -->
-      <div class="c3 stack">
-        <a class="box-link"
-           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1330--Perform-Ini.aspx?csf=1&web=1&e=rj6Ikj"
-           target="_blank" rel="noopener noreferrer">
-          <div class="step">1330</div>
-          <div class="text">Perform<br/>Initial<br/>Financial<br/>Review</div>
-        </a>
+      <!-- 1330 -->
+      <a class="box b1330" id="b1330"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1330--Perform-Ini.aspx?csf=1&web=1&e=rj6Ikj"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1330</div>
+        <div class="text">Perform<br/>Initial<br/>Financial Review</div>
+      </a>
 
-        <a class="box-link"
-           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1340--Execute-Cultural-Fit-Assessment.aspx?csf=1&web=1&e=ePrbmI"
-           target="_blank" rel="noopener noreferrer">
-          <div class="step">1340</div>
-          <div class="text">Execute<br/>Cultural Fit<br/>Assessment</div>
-        </a>
-      </div>
+      <!-- 1340 -->
+      <a class="box b1340" id="b1340"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1340--Execute-Cultural-Fit-Assessment.aspx?csf=1&web=1&e=ePrbmI"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1340</div>
+        <div class="text">Execute<br/>Cultural Fit<br/>Assessment</div>
+      </a>
 
       <!-- 1350 -->
-      <div class="c4 mid-row">
-        <a class="box-link"
-           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1350--Propose-High-level-Deal-Terms.aspx?csf=1&web=1&e=BBsg2c"
-           target="_blank" rel="noopener noreferrer">
-          <div class="step">1350</div>
-          <div class="text">Propose<br/>High-level<br/>Deal Terms</div>
-        </a>
-      </div>
+      <a class="box b1350" id="b1350"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1350--Propose-High-level-Deal-Terms.aspx?csf=1&web=1&e=BBsg2c"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1350</div>
+        <div class="text">Propose<br/>High-level<br/>Deal Terms</div>
+      </a>
 
       <!-- 1360 -->
-      <div class="c5 mid-row">
-        <a class="box-link"
-           href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1360-.aspx?csf=1&web=1&e=Cw8wmT"
-           target="_blank" rel="noopener noreferrer">
-          <div class="step">1360</div>
-          <div class="text">Sign Letter<br/>of Intent<br/>(LOI)</div>
-        </a>
-      </div>
-
-      <!-- Lines -->
-      <div class="line h l12" aria-hidden="true"></div>
-      <div class="line h l2J" aria-hidden="true"></div>
-      <div class="line v branchV" aria-hidden="true"></div>
-      <div class="line h to1330" aria-hidden="true"></div>
-      <div class="line h to1340" aria-hidden="true"></div>
-
-      <!-- NEW: 1330/1340 -> merge -> 1350 -->
-      <div class="line h from1330toMerge" aria-hidden="true"></div>
-      <div class="line h from1340toMerge" aria-hidden="true"></div>
-      <div class="line v mergeV" aria-hidden="true"></div>
-      <div class="line h mergeTo1350" aria-hidden="true"></div>
-
-      <div class="line h l45" aria-hidden="true"></div>
+      <a class="box b1360" id="b1360"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1360-.aspx?csf=1&web=1&e=Cw8wmT"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1360</div>
+        <div class="text">Sign Letter<br/>of Intent<br/>(LOI)</div>
+      </a>
     </div>
   </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const flow = document.getElementById("flow");
+      const svg = document.getElementById("wires");
+      const header = document.getElementById("hdr");
+
+      const boxes = [...document.querySelectorAll("a.box")];
+
+      const b1310 = document.getElementById("b1310");
+      const b1320 = document.getElementById("b1320");
+      const b1330 = document.getElementById("b1330");
+      const b1340 = document.getElementById("b1340");
+      const b1350 = document.getElementById("b1350");
+      const b1360 = document.getElementById("b1360");
+
+      const setVar = (k, v) => root.style.setProperty(k, v);
+
+      function relRect(el) {
+        const fr = flow.getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+        return {
+          left: r.left - fr.left,
+          top: r.top - fr.top,
+          right: r.right - fr.left,
+          bottom: r.bottom - fr.top,
+          width: r.width,
+          height: r.height
+        };
+      }
+
+      function fitSquares() {
+        const prev = boxes.map(b => ({ w: b.style.width, h: b.style.height }));
+        boxes.forEach(b => { b.style.width = "auto"; b.style.height = "auto"; });
+        void flow.offsetWidth;
+
+        let maxW = 0, maxH = 0;
+        for (const b of boxes) {
+          const r = b.getBoundingClientRect();
+          maxW = Math.max(maxW, r.width);
+          maxH = Math.max(maxH, r.height);
+        }
+
+        const size = Math.ceil(Math.max(maxW, maxH));
+        const gapX = parseFloat(getComputedStyle(root).getPropertyValue("--gapX")) || 28;
+        const edgeRight = parseFloat(getComputedStyle(root).getPropertyValue("--edgeRight")) || 28;
+
+        setVar("--box", size + "px");
+        setVar("--flowW", ((size * 5) + (gapX * 4) + edgeRight) + "px");
+
+        boxes.forEach((b, i) => { b.style.width = prev[i].w; b.style.height = prev[i].h; });
+      }
+
+      function drawWires() {
+        const fr = flow.getBoundingClientRect();
+        svg.setAttribute("viewBox", `0 0 ${fr.width} ${fr.height}`);
+        svg.setAttribute("width", fr.width);
+        svg.setAttribute("height", fr.height);
+        header.style.width = fr.width + "px";
+
+        const r1310 = relRect(b1310);
+        const r1320 = relRect(b1320);
+        const r1330 = relRect(b1330);
+        const r1340 = relRect(b1340);
+        const r1350 = relRect(b1350);
+        const r1360 = relRect(b1360);
+
+        const stroke = getComputedStyle(root).getPropertyValue("--brand").trim() || "#2f64f5";
+        const tick = parseFloat(getComputedStyle(root).getPropertyValue("--tick")) || 10;
+
+        const clear = 10;
+        const capPad = 6;
+        const linePad = 6;
+
+        const y1310 = r1310.top + (r1310.height / 2);
+        const y1320 = r1320.top + (r1320.height / 2);
+        const y1350 = r1350.top + (r1350.height / 2);
+
+        /* bracket around 1330 + 1340 */
+        const yCol3Top = r1330.top + capPad;
+        const yCol3Bot = r1340.bottom - capPad;
+
+        /* bracket sits between col2 and col3 */
+        const xBracketL = r1330.left - clear;
+        const xBracketR = Math.min(r1330.right + clear, r1350.left - clear);
+
+        svg.innerHTML = `
+          <g fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="square">
+            <!-- Split/Merge bracket -->
+            <path d="M ${xBracketL + tick} ${yCol3Top} H ${xBracketL} V ${yCol3Bot} H ${xBracketL + tick}" />
+            <path d="M ${xBracketR - tick} ${yCol3Top} H ${xBracketR} V ${yCol3Bot} H ${xBracketR - tick}" />
+
+            <!-- FIX: 1310 -> 1320 (stops at 1320, does NOT run behind it) -->
+            <path d="M ${r1310.right} ${y1310} H ${r1320.left}" />
+
+            <!-- 1320 -> bracket (ends at bracket, no overshoot) -->
+            <path d="M ${r1320.right} ${y1320} H ${xBracketL + linePad -8}" />
+
+            <!-- bracket -> 1350 -->
+            <path d="M ${xBracketR} ${y1350} H ${r1350.left}" />
+
+            <!-- 1350 -> 1360 -->
+            <path d="M ${r1350.right} ${y1350} H ${r1360.left}" />
+          </g>
+        `;
+      }
+
+      function enableRipple() {
+        boxes.forEach(box => {
+          box.addEventListener("pointerdown", (e) => {
+            const r = box.getBoundingClientRect();
+            box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+            box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+            box.classList.remove("ripple");
+            void box.offsetWidth;
+            box.classList.add("ripple");
+          });
+          box.addEventListener("animationend", () => box.classList.remove("ripple"));
+        });
+      }
+
+      function layout() {
+        fitSquares();
+        requestAnimationFrame(drawWires);
+      }
+
+      window.addEventListener("load", () => {
+        enableRipple();
+        layout();
+      });
+
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__layoutT);
+        window.__layoutT = setTimeout(layout, 80);
+      });
+    })();
+  </script>
 </body>
 </html>
+
