@@ -3,190 +3,206 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Merger / Purchase Agreement</title>
+  <title>Merger /Purchase Agreement</title>
 
   <style>
     :root{
-      /* Green used everywhere (matches screenshot) */
-      --green: #0aa84f;
+      --numGreen:#2e7d32;
+      --green:#0aa84f;
 
-      --border: 3px solid var(--green);
-      --line: var(--green);
+      --boxW:110px;
+      --boxH:110px;
+      --boxPad:6px;
 
-      /* Fixed viewport */
-      --frameW: 500px;
-      --frameH: 500px;
+      --gapX:10px;
 
-      /* Box sizing */
-      --boxW: 90px;
-      --boxH: 110px;
-      --boxPad: 10px;
+      --border:2px solid var(--green);
+      --line:var(--green);
 
-      /* Spacing */
-      --gapX: 10px;
+      --headerFont:17px;
+      --stepFont:11px;
+      --textFont:9.5px;
 
-      /* Typography (STANDARD across all pages) */
-      --headerFont: 17px;
-      --stepFont: 11px;
-      --textFont: 9.5px;
+      --flowTopPad:10px;
+      --rowCenterY:calc(var(--flowTopPad) + (var(--boxH) / 2));
 
-      /* Layout helpers */
-      --flowTopPad: 10px;
-      --rowCenterY: calc(var(--flowTopPad) + (var(--boxH) / 2));
+      --flowW:calc((var(--boxW) * 5) + (var(--gapX) * 4));
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #000;
+      margin:0;
+      padding:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
-      background: #fff;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      background:#fff;
+      overflow:visible;
+      width:var(--flowW);
     }
 
     .header{
-      background: var(--green);
-      color: #fff;
-      padding: 8px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 18px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      width:var(--flowW);
+      background:var(--green);
+      color:#fff;
+      padding:8px 12px;
+      font-size:var(--headerFont);
+      font-weight:700;
+      margin-bottom:18px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      box-sizing:border-box;
     }
 
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(5, var(--boxW));
-      column-gap: var(--gapX);
-      align-items: start;
-      padding-top: var(--flowTopPad);
+      position:relative;
+      width:var(--flowW);
+      display:grid;
+      grid-template-columns:repeat(5, var(--boxW));
+      column-gap:var(--gapX);
+      align-items:start;
+      padding-top:var(--flowTopPad);
+      box-sizing:border-box;
     }
 
-    /* Clickable box */
     .box-link{
-      display: block;
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      background: #fff;
-      text-decoration: none;
-      color: inherit;
-      line-height: 1.15;
-      position: relative;
-      z-index: 2;
+      display:block;
+      width:var(--boxW);
+      height:var(--boxH);
+      border:var(--border);
+      padding:var(--boxPad);
+      box-sizing:border-box;
+      background:#fff;
+      text-decoration:none;
+      color:inherit;
+      line-height:1.15;
+      position:relative;
+      z-index:2;
+      overflow:hidden;
+      transition:background-color 120ms ease, transform 80ms ease;
+      outline:none;
+      cursor:pointer;
     }
+
+    .box-link:hover{ background:rgba(10,168,79,.10); }
+    .box-link:active{ transform:scale(.99); background:rgba(10,168,79,.14); }
+    .box-link:focus-visible{ box-shadow:0 0 0 3px rgba(10,168,79,.25); }
 
     .step{
-      font-size: var(--stepFont);
-      font-weight: 400;
-      margin: 0 0 6px 0;
+      font-size:var(--stepFont);
+      font-weight:700;
+      margin:0 0 6px 0;
+      color:var(--numGreen);
+      white-space:nowrap;
     }
 
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
-      margin: 0;
+      font-size:var(--textFont);
+      font-weight:400;
+      margin:0;
+      overflow-wrap:anywhere;
     }
 
-    /* Straight connector lines */
     .h-line{
-      position: absolute;
-      height: 2px;
-      background: var(--line);
-      top: var(--rowCenterY);
-      pointer-events: none;
-      z-index: 1;
+      position:absolute;
+      height:2px;
+      background:var(--line);
+      top:var(--rowCenterY);
+      pointer-events:none;
+      z-index:1;
     }
+    .h12{ left:calc(var(--boxW)); width:var(--gapX); }
+    .h23{ left:calc((var(--boxW) * 2) + (var(--gapX) * 1)); width:var(--gapX); }
+    .h34{ left:calc((var(--boxW) * 3) + (var(--gapX) * 2)); width:var(--gapX); }
+    .h45{ left:calc((var(--boxW) * 4) + (var(--gapX) * 3)); width:var(--gapX); }
 
-    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
-    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
-    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
-    .h45{ left: calc((var(--boxW) * 4) + (var(--gapX) * 3)); width: var(--gapX); }
+    .box-link::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(10,168,79,.25);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
+    }
+    .box-link.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{opacity:.9; transform:translate(-50%,-50%) scale(1);}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(18);}
+    }
   </style>
 </head>
 
 <body>
   <div class="frame">
-    <div class="header">Merger / Purchase Agreement</div>
+    <div class="header">Merger /Purchase Agreement</div>
 
     <div class="flow">
       <a class="box-link"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3010--Draft-Initial-Purchase-Agreement.aspx?csf=1&web=1&e=cADGFy"
          target="_blank" rel="noopener noreferrer">
         <div class="step">3010</div>
-        <div class="text">
-          Draft Initial<br/>
-          Purchase<br/>
-          Agreement
-        </div>
+        <div class="text">Draft Initial<br/>Purchase<br/>Agreement</div>
       </a>
 
       <a class="box-link"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3020--Negotiate-Key-Deal-Terms.aspx?csf=1&web=1&e=xPPBZp"
          target="_blank" rel="noopener noreferrer">
         <div class="step">3020</div>
-        <div class="text">
-          Negotiate<br/>
-          Key Deal<br/>
-          Terms
-        </div>
+        <div class="text">Negotiate<br/>Key Deal<br/>Terms</div>
       </a>
 
       <a class="box-link"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3030--Negotiate-Key-Deal-Terms.aspx?csf=1&web=1&e=XzXDzQ"
          target="_blank" rel="noopener noreferrer">
         <div class="step">3030</div>
-        <div class="text">
-          Finalize<br/>
-          Disclosure<br/>
-          Schedules
-        </div>
+        <div class="text">Finalize<br/>Disclosure<br/>Schedules</div>
       </a>
 
       <a class="box-link"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3040--Resolve-Open-Legal-and-Commercial-Issues.aspx?csf=1&web=1&e=Dtv1QG"
          target="_blank" rel="noopener noreferrer">
         <div class="step">3040</div>
-        <div class="text">
-          Resolve Open<br/>
-          Legal and<br/>
-          Commercial<br/>
-          Issues
-        </div>
+        <div class="text">Resolve<br/>Open Legal<br/>and<br/>Commercial<br/>Issues</div>
       </a>
 
       <a class="box-link"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3050--Finalize-Draft-Agreement.aspx?csf=1&web=1&e=Mi9tXQ"
          target="_blank" rel="noopener noreferrer">
         <div class="step">3050</div>
-        <div class="text">
-          Finalize Draft<br/>
-          Agreement
-        </div>
+        <div class="text">Finalize Draft<br/>Agreement</div>
       </a>
 
-      <!-- connector lines -->
-      <div class="h-line h12"></div>
-      <div class="h-line h23"></div>
-      <div class="h-line h34"></div>
-      <div class="h-line h45"></div>
+      <div class="h-line h12" aria-hidden="true"></div>
+      <div class="h-line h23" aria-hidden="true"></div>
+      <div class="h-line h34" aria-hidden="true"></div>
+      <div class="h-line h45" aria-hidden="true"></div>
     </div>
   </div>
+
+  <script>
+    document.querySelectorAll(".box-link").forEach(box => {
+      box.addEventListener("pointerdown", (e) => {
+        const r = box.getBoundingClientRect();
+        box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+        box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+        box.classList.remove("ripple");
+        void box.offsetWidth;
+        box.classList.add("ripple");
+      });
+      box.addEventListener("animationend", () => box.classList.remove("ripple"));
+    });
+  </script>
 </body>
 </html>
+
