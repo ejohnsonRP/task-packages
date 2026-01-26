@@ -7,110 +7,150 @@
 
   <style>
     :root{
-      /* Teal used everywhere */
-      --teal: #0a9b8a;
+      /* ✅ step number color requirement */
+      --numGreen:#0a9b8a;
 
-      /* Shared styling */
-      --line: var(--teal);
-      --border: 2px solid var(--teal);
+      /* ✅ keep the SAME green used for the bar/lines/boxes in 3.4 */
+      --green:#0a9b8a;
 
-      /* Fixed viewport */
-      --frameW: 500px;
-      --frameH: 500px;
+      /* ✅ EXACT same sizing as 3.4 boxes */
+      --boxW:110px;
+      --boxH:110px;
+      --boxPad:6px;
 
-      /* Box sizing */
-      --boxW: 85px;
-      --boxH: 115px;
-      --boxPad: 8px;
+      /* ✅ EXACT same spacing as 3.4 boxes */
+      --gapX:10px;
 
-      /* Spacing */
-      --gapX: 8px;
+      --border:2px solid var(--green);
+      --line:var(--green);
 
-      /* Typography (UNCHANGED) */
-      --headerFont: 17px;
-      --stepFont: 11px;
-      --textFont: 9.5px;
+      /* typography (EXACT match to 3.4) */
+      --headerFont:17px;
+      --stepFont:11px;
+      --textFont:9.5px;
+
+      /* layout helpers */
+      --flowTopPad:10px;
+      --rowCenterY:calc(var(--flowTopPad) + (var(--boxH) / 2));
+
+      /* computed widths */
+      --flowW:calc((var(--boxW) * 5) + (var(--gapX) * 4));
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #000;
+      margin:0;
+      padding:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      background:#fff;
+      overflow:visible;
+      width:var(--flowW);
     }
 
     .header{
-      background: var(--teal);
-      color: #fff;
-      padding: 8px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 18px;
+      width:var(--flowW);
+      background:var(--green);
+      color:#fff;
+      padding:8px 12px;
+      font-size:var(--headerFont);
+      font-weight:700;
+      margin-bottom:18px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      box-sizing:border-box;
     }
 
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(5, var(--boxW));
-      column-gap: var(--gapX);
-      align-items: start;
-      padding-top: 8px;
+      position:relative;
+      width:var(--flowW);
+      display:grid;
+      grid-template-columns:repeat(5, var(--boxW));
+      column-gap:var(--gapX);
+      align-items:start;
+      padding-top:var(--flowTopPad);
+      box-sizing:border-box;
     }
 
-    /* Clickable box */
     .box-link{
-      display: block;
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      background: #fff;
-      text-decoration: none;
-      color: inherit;
-      line-height: 1.15;
-      position: relative;
-      z-index: 2;
+      display:block;
+      width:var(--boxW);
+      height:var(--boxH);
+      border:var(--border);
+      padding:var(--boxPad);
+      box-sizing:border-box;
+      background:#fff;
+      text-decoration:none;
+      color:inherit;
+      line-height:1.15;
+      position:relative;
+      z-index:2;
+      overflow:hidden;
+      transition:background-color 120ms ease, transform 80ms ease;
+      outline:none;
+      cursor:pointer;
     }
 
+    .box-link:hover{ background:rgba(10,168,79,.10); }
+    .box-link:active{ transform:scale(.99); background:rgba(10,168,79,.14); }
+    .box-link:focus-visible{ box-shadow:0 0 0 3px rgba(10,168,79,.25); }
+
+    /* ✅ numbers bold + #2e7d32 */
     .step{
-      font-size: var(--stepFont);
-      font-weight: 700;
-      margin: 0 0 5px 0;
+      font-size:var(--stepFont);
+      font-weight:700;
+      margin:0 0 6px 0;
+      color:var(--numGreen);
+      white-space:nowrap;
     }
 
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
-      margin: 0;
+      font-size:var(--textFont);
+      font-weight:400;
+      margin:0;
+      overflow-wrap:anywhere;
     }
 
-    /* Connector lines */
+    /* connector lines */
     .h-line{
-      position: absolute;
-      height: 2px;
-      background: var(--line);
-      top: calc(8px + (var(--boxH) / 2));
-      pointer-events: none; /* do not block clicks */
-      z-index: 1;
+      position:absolute;
+      height:2px;
+      background:var(--line);
+      top:var(--rowCenterY);
+      pointer-events:none;
+      z-index:1;
     }
+    .h12{ left:calc(var(--boxW)); width:var(--gapX); }
+    .h23{ left:calc((var(--boxW) * 2) + (var(--gapX) * 1)); width:var(--gapX); }
+    .h34{ left:calc((var(--boxW) * 3) + (var(--gapX) * 2)); width:var(--gapX); }
+    .h45{ left:calc((var(--boxW) * 4) + (var(--gapX) * 3)); width:var(--gapX); }
 
-    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
-    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
-    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
-    .h45{ left: calc((var(--boxW) * 4) + (var(--gapX) * 3)); width: var(--gapX); }
+    /* ripple */
+    .box-link::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(10,168,79,.25);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
+    }
+    .box-link.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{opacity:.9; transform:translate(-50%,-50%) scale(1);}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(18);}
+    }
   </style>
 </head>
 
@@ -123,69 +163,59 @@
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2010--Gather-and-Nor.aspx?csf=1&web=1&e=qwjjZU"
          target="_blank" rel="noopener noreferrer">
         <div class="step">2010</div>
-        <div class="text">
-          Gather and<br/>
-          Normalize<br/>
-          Financial<br/>
-          Data
-        </div>
+        <div class="text">Gather and<br/>Normalize<br/>Financial<br/>Data</div>
       </a>
 
       <a class="box-link"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package(1).aspx?csf=1&web=1&e=mkeVA9"
          target="_blank" rel="noopener noreferrer">
         <div class="step">2020</div>
-        <div class="text">
-          Perform<br/>
-          Comparable<br/>
-          Company<br/>
-          Analysis
-        </div>
+        <div class="text">Perform<br/>Comparable<br/>Company<br/>Analysis</div>
       </a>
 
       <a class="box-link"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2030--Conduct-Precedent-Transaction-Analysis.aspx?csf=1&web=1&e=wdBzB2"
          target="_blank" rel="noopener noreferrer">
         <div class="step">2030</div>
-        <div class="text">
-          Conduct<br/>
-          Precedent<br/>
-          Transaction<br/>
-          Analysis
-        </div>
+        <div class="text">Conduct<br/>Precedent<br/>Transaction<br/>Analysis</div>
       </a>
 
       <a class="box-link"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2040--Build-Discounted-Cash-Flow-(DCF)-Model.aspx?csf=1&web=1&e=ynggMW"
          target="_blank" rel="noopener noreferrer">
         <div class="step">2040</div>
-        <div class="text">
-          Build<br/>
-          Discounted<br/>
-          Cash Flow<br/>
-          (DCF) Model
-        </div>
+        <div class="text">Build<br/>Discounted<br/>Cash Flow<br/>(DCF) Model</div>
       </a>
 
       <a class="box-link"
          href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-2050--Synthesize-Valuation-Range-%26-Recommend.aspx?csf=1&web=1&e=GFEcMR"
          target="_blank" rel="noopener noreferrer">
         <div class="step">2050</div>
-        <div class="text">
-          Synthesize<br/>
-          Valuation<br/>
-          Range &amp;<br/>
-          Recommend
-        </div>
+        <div class="text">Synthesize<br/>Valuation<br/>Range &amp;<br/>Recommend</div>
       </a>
 
       <!-- connector lines -->
-      <div class="h-line h12"></div>
-      <div class="h-line h23"></div>
-      <div class="h-line h34"></div>
-      <div class="h-line h45"></div>
+      <div class="h-line h12" aria-hidden="true"></div>
+      <div class="h-line h23" aria-hidden="true"></div>
+      <div class="h-line h34" aria-hidden="true"></div>
+      <div class="h-line h45" aria-hidden="true"></div>
     </div>
   </div>
+
+  <script>
+    document.querySelectorAll(".box-link").forEach(box => {
+      box.addEventListener("pointerdown", (e) => {
+        const r = box.getBoundingClientRect();
+        box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+        box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+        box.classList.remove("ripple");
+        void box.offsetWidth;
+        box.classList.add("ripple");
+      });
+      box.addEventListener("animationend", () => box.classList.remove("ripple"));
+    });
+  </script>
 </body>
 </html>
+
 
